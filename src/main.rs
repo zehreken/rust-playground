@@ -1,6 +1,7 @@
 extern crate sdl2;
 
 use sdl2::pixels::Color;
+use std::time::Duration;
 
 fn main()
 {
@@ -36,5 +37,6 @@ fn main()
 		canvas.clear();
 		canvas.present();
 
+		::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
 	}
 }
