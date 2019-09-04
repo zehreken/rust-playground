@@ -15,7 +15,7 @@ fn main()
 	let sdl_context = sdl2::init().unwrap();
 	let video_subsystem = sdl_context.video().unwrap();
 	let window = video_subsystem
-		.window("Game", grid_config::screen_width, grid_config::screen_height)
+		.window("Game", grid_config::SCREEN_WIDTH, grid_config::SCREEN_HEIGHT)
 		.position_centered()
 		.build()
 		.unwrap();
