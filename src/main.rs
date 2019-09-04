@@ -5,6 +5,8 @@ use sdl2::pixels::Color;
 use std::time::Duration;
 use sdl2::rect::Rect;
 use rand::Rng;
+mod grid;
+pub use crate::grid::grid_config;
 
 fn main()
 {
@@ -13,7 +15,7 @@ fn main()
 	let sdl_context = sdl2::init().unwrap();
 	let video_subsystem = sdl_context.video().unwrap();
 	let window = video_subsystem
-		.window("Game", 800, 600)
+		.window("Game", grid_config::screen_width, grid_config::screen_height)
 		.position_centered()
 		.build()
 		.unwrap();
