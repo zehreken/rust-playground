@@ -15,7 +15,7 @@ fn main()
 	let sdl_context = sdl2::init().unwrap();
 	let video_subsystem = sdl_context.video().unwrap();
 	let window = video_subsystem
-		.window("Game", grid_config::SCREEN_WIDTH, grid_config::SCREEN_HEIGHT)
+		.window("Game", grid_config::SCREEN_WIDTH as u32, grid_config::SCREEN_HEIGHT as u32)
 		.position_centered()
 		.build()
 		.unwrap();
@@ -24,9 +24,6 @@ fn main()
 	canvas.set_draw_color(Color::RGB(0, 255, 255));
 	canvas.clear();
 	canvas.present();
-
-	let row_count = 60;
-	let column_count = 80;
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 	let mut i = 0;
@@ -47,14 +44,15 @@ fn main()
 		canvas.set_draw_color(Color::RGB(i, 64, 255 - i));
 		canvas.clear();
 
-        for row in 0..row_count
+        for row in 0..grid_config::ROW_COUNT
 		{               
-			for column in 0..column_count
+			for column in 0..grid_config::COLUMN_COUNT
 			{
 				if rng.gen_range(0, 2) == 0
 				{
 					canvas.set_draw_color(Color::RGB(0, 0, 0));
-					canvas.fill_rect(Rect::new(column * 10, row * 10, 10, 10));
+					let cell_size:i32 = grid_config::CELL_SIZE;
+					canvas.fill_rect(Rect::new(column * cell_size, row * cell_size, cell_size as u32, cell_size as u32));
 				}
 			}
 		}

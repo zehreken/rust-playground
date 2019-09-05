@@ -11,3 +11,11 @@ struct Cell
 	current_state:i32,
 	future_state:i32,
 }
+
+pub mod cell
+{
+	fn setPosition(cell: Cell, row:i32, column:i32)
+	{
+
+	}
+}
