@@ -8,8 +8,41 @@ use rand::Rng;
 mod grid;
 pub use crate::grid::grid_config;
 
+let grid = [mut [ 
+
+struct Point
+{
+	x:i32,
+	y:i32,
+}
+
+struct Cell
+{
+	position:Point,
+	neighbours:[Point; 8],
+	current_state:i32,
+	future_state:i32,
+}
+
+fn set_position(cell:Cell, x:i32, y:i32)
+{
+	
+}
+
+fn update()
+{
+	
+}
+
 fn main()
 {
+	for row in 0..grid_config::ROW_COUNT
+	{
+		for column in 0..grid_config::COLUMN_COUNT
+		{
+		}
+	}
+
 	let mut rng = rand::thread_rng();
 
 	let sdl_context = sdl2::init().unwrap();
