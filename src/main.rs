@@ -8,14 +8,25 @@ use rand::Rng;
 mod grid;
 pub use crate::grid::grid_config;
 
-let grid = [mut [ 
+const moore_directions:[Point; 8] = [
+	Point{ x:-1, y:-1 },
+	Point{ x:-1, y:0 },
+	Point{ x:-1, y:1 },
+	Point{ x:0, y:1 },
+	Point{ x:1, y:1 },
+	Point{ x:1, y:0 },
+	Point{ x:1, y:-1 },
+	Point{ x:0, y:-1 },
+];
 
+#[derive(Copy, Clone)]
 struct Point
 {
 	x:i32,
 	y:i32,
 }
 
+#[derive(Copy, Clone)]
 struct Cell
 {
 	position:Point,
@@ -24,9 +35,31 @@ struct Cell
 	future_state:i32,
 }
 
-fn set_position(cell:Cell, x:i32, y:i32)
+fn calculate_neighbours(x:i32, y:i32) -> [Point; 8] {
+	let neighbours:[Point; 8] = [
+		Point{ x: moore_directions[0].x + x, y:moore_directions[0].y + y},
+		Point{ x: moore_directions[0].x + x, y:moore_directions[0].y + y},
+		Point{ x: moore_directions[0].x + x, y:moore_directions[0].y + y},
+		Point{ x: moore_directions[0].x + x, y:moore_directions[0].y + y},
+		Point{ x: moore_directions[0].x + x, y:moore_directions[0].y + y},
+		Point{ x: moore_directions[0].x + x, y:moore_directions[0].y + y},
+		Point{ x: moore_directions[0].x + x, y:moore_directions[0].y + y},
+		Point{ x: moore_directions[0].x + x, y:moore_directions[0].y + y},
+	];
+
+	return neighbours;
+}
+
+fn create_cell() -> Cell
 {
-	
+	let cell = Cell {
+		position: Point{ x: 0, y: 0 },
+		neighbours: calculate_neighbours(0, 0),
+		current_state: 0,
+		future_state: 0,
+	};
+
+	return cell;
 }
 
 fn update()
@@ -36,12 +69,19 @@ fn update()
 
 fn main()
 {
+	let mut grid: [[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize] =
+		[[create_cell(); grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize];
+
 	for row in 0..grid_config::ROW_COUNT
 	{
 		for column in 0..grid_config::COLUMN_COUNT
 		{
+			grid[row as usize][column as usize].position = Point{ x:column, y:row };
+			grid[row as usize][column as usize].neighbours = calculate_neighbours(column, row);
 		}
 	}
+
+	println!("{}, {}", grid[4][5].position.x, grid[4][5].position.y);
 
 	let mut rng = rand::thread_rng();
 
