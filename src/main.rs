@@ -95,3 +95,60 @@ fn main()
 		::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
 	}
 }
+
+/*
+#[derive(Copy, Clone)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+#[derive(Copy, Clone)]
+struct Cell {
+    position: Point,
+    neighbours: [i32; 8],
+    current_state: i32,
+    future_state: i32,
+}
+
+fn set_position(cell: Cell, x: i32, y: i32) {
+    println!("position: {}, {}", cell.position.x, cell.position.x);
+}
+
+const ROW_COUNT: i32 = 10;
+const COLUMN_COUNT: i32 = 20;
+
+fn create_cell() -> Cell {
+    let cell = Cell {
+        position: Point { x: 0, y: 0 },
+        neighbours: [0, 0, 0, 0, 0, 0, 0, 0],
+        current_state: 0,
+        future_state: 0,
+    };
+
+    return cell;
+}
+
+fn main() {
+    let mut grid: [[Cell; COLUMN_COUNT as usize]; ROW_COUNT as usize] = [[create_cell(); COLUMN_COUNT as usize]; ROW_COUNT as usize];
+
+    for row in 0..ROW_COUNT {
+        for column in 0..COLUMN_COUNT {
+            let cell = Cell {
+                position: Point { x: column, y: row },
+                neighbours: [0, 0, 0, 0, 0, 0, 0, 0],
+                current_state: 0,
+                future_state: 0,
+            };
+            // set_position(cell, column, row);
+            grid[row as usize][column as usize] = cell;
+        }
+    }
+
+    for row in 0..ROW_COUNT {
+        for column in 0..COLUMN_COUNT {
+            println!("Position: {}", grid[row as usize][column as usize].position.x);
+        }
+    }
+}
+*/
