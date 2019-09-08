@@ -69,6 +69,8 @@ fn update()
 
 fn main()
 {
+	let mut rng = rand::thread_rng();
+	
 	let mut grid: [[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize] =
 		[[create_cell(); grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize];
 
@@ -78,12 +80,11 @@ fn main()
 		{
 			grid[row as usize][column as usize].position = Point{ x:column, y:row };
 			grid[row as usize][column as usize].neighbours = calculate_neighbours(column, row);
+			grid[row as usize][column as usize].current_state = if rng.gen_range(0, 4) < 1 { 0 } else { 1 };
 		}
 	}
 
 	println!("{}, {}", grid[4][5].position.x, grid[4][5].position.y);
-
-	let mut rng = rand::thread_rng();
 
 	let sdl_context = sdl2::init().unwrap();
 	let video_subsystem = sdl_context.video().unwrap();
@@ -121,7 +122,8 @@ fn main()
 		{               
 			for column in 0..grid_config::COLUMN_COUNT
 			{
-				if rng.gen_range(0, 2) == 0
+				//if rng.gen_range(0, 2) == 0
+				if grid[row as usize][column as usize].current_state == 1
 				{
 					canvas.set_draw_color(Color::RGB(0, 0, 0));
 					let cell_size:i32 = grid_config::CELL_SIZE;
