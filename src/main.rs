@@ -50,7 +50,44 @@ fn calculate_neighbours(x:i32, y:i32) -> [Point; 8] {
 	return neighbours;
 }
 
-fn cell_tick(cell:Cell)
+fn get_live_neighbour_count() -> i32
+{
+	return 0;
+}
+
+fn cell_tick(mut cell:Cell)
+{
+	if cell.current_state == 1
+	{
+		let live_neighbour_count:i32 = get_live_neighbour_count();
+		if live_neighbour_count < 2
+		{
+			cell.future_state = 0;
+		}
+		else if live_neighbour_count == 2 || live_neighbour_count == 3
+		{
+			cell.future_state = 1;
+		}
+		else
+		{
+			cell.future_state = 0;
+		}
+	}
+	else
+	{
+		let live_neighbour_count = get_live_neighbour_count();
+		if live_neighbour_count == 3
+		{
+			cell.future_state = 1;
+		}
+		else
+		{
+			cell.future_state = 0;
+		}
+	}
+}
+
+fn cell_swap(cell:Cell)
 {
 
 }
@@ -65,11 +102,6 @@ fn create_cell() -> Cell
 	};
 
 	return cell;
-}
-
-fn update()
-{
-	
 }
 
 fn main()
@@ -134,6 +166,15 @@ fn main()
 					let cell_size:i32 = grid_config::CELL_SIZE;
 					canvas.fill_rect(Rect::new(column * cell_size, row * cell_size, cell_size as u32, cell_size as u32));
 				}
+				cell_tick(grid[row as usize][column as usize]);
+			}
+		}
+
+		for row in 0..grid_config::ROW_COUNT
+		{
+			for column in 0..grid_config::COLUMN_COUNT
+			{
+				cell_swap(grid[row as usize][column as usize]);
 			}
 		}
 
