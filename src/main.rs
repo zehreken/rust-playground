@@ -8,9 +8,6 @@ use rand::Rng;
 mod grid;
 pub use crate::grid::grid_config;
 
-static mut grid: [[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize] =
-				[[create_cell(); grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize];
-
 const moore_directions:[Point; 8] = [
 	Point{ x:-1, y:-1 },
 	Point{ x:-1, y:0 },
@@ -53,9 +50,9 @@ fn calculate_neighbours(x:i32, y:i32) -> [Point; 8] {
 	return neighbours;
 }
 
-fn get_live_neighbour_count(cell:Cell) -> i32
+fn get_live_neighbour_count(cell:Cell, grid:[[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize]) -> i32
 {
-	let neighbour_count:i32 = 0;
+	let mut neighbour_count:i32 = 0;
 	for i in 0..8
 	{
 		if cell.neighbours[i].x >= 0
@@ -67,15 +64,16 @@ fn get_live_neighbour_count(cell:Cell) -> i32
 		}
 	}
 
+	println!("neighbour count: {}", neighbour_count);
 	return neighbour_count;
 }
 
-fn cell_tick(mut cell:Cell) -> Cell
+fn cell_tick(mut cell:Cell, grid:[[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize]) -> Cell
 {
 	println!("before: {}", cell.current_state);
 	if cell.current_state == 1
 	{
-		let live_neighbour_count:i32 = get_live_neighbour_count(cell);
+		let live_neighbour_count:i32 = get_live_neighbour_count(cell, grid);
 		if live_neighbour_count < 2
 		{
 			cell.future_state = 0;
@@ -92,7 +90,7 @@ fn cell_tick(mut cell:Cell) -> Cell
 	}
 	else
 	{
-		let live_neighbour_count:i32 = get_live_neighbour_count(cell);
+		let live_neighbour_count:i32 = get_live_neighbour_count(cell, grid);
 		if live_neighbour_count == 3
 		{
 			cell.future_state = 1;
@@ -129,8 +127,8 @@ fn main()
 {
 	let mut rng = rand::thread_rng();
 	
-	//let mut grid: [[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize] =
-		//[[create_cell(); grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize];
+	let mut grid: [[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize] =
+		[[create_cell(); grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize];
 
 	for row in 0..grid_config::ROW_COUNT
 	{
@@ -142,9 +140,9 @@ fn main()
 		}
 	}
 
-	println!("{}, {}, current_state: {}", grid[4][5].position.x, grid[4][5].position.y, grid[4][5].current_state);
-	grid[4][5] = cell_tick(grid[4][5]);
-	println!("current_state: {}", grid[4][5].current_state);
+	println!("{}, {}, current_state: {}", grid[0][0].position.x, grid[0][0].position.y, grid[0][0].current_state);
+	grid[0][0] = cell_tick(grid[0][0], grid);
+	println!("current_state: {}", grid[0][0].current_state);
 
 	let sdl_context = sdl2::init().unwrap();
 	let video_subsystem = sdl_context.video().unwrap();
