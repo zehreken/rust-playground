@@ -78,7 +78,6 @@ fn get_live_neighbour_count(
 ) -> i32 {
     let mut neighbour_count: i32 = 0;
     for i in 0..8 {
-        println!("cell: {:?}", cell.neighbours[i]);
         if cell.neighbours[i].x >= 0
             && cell.neighbours[i].x < grid_config::ROW_COUNT
             && cell.neighbours[i].y >= 0
@@ -91,7 +90,7 @@ fn get_live_neighbour_count(
         }
     }
 
-    println!("neighbour count: {}", neighbour_count);
+    //println!("neighbour count: {}", neighbour_count);
     return neighbour_count;
 }
 
@@ -99,7 +98,7 @@ fn cell_tick(
     mut cell: Cell,
     grid: [[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize],
 ) -> Cell {
-    println!("before: {}", cell.current_state);
+    //println!("before: {}", cell.current_state);
     if cell.current_state == 1 {
         let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
         if live_neighbour_count < 2 {
@@ -109,7 +108,6 @@ fn cell_tick(
         } else {
             cell.future_state = 0;
         }
-        cell.current_state = 0;
     } else {
         let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
         if live_neighbour_count == 3 {
@@ -117,9 +115,8 @@ fn cell_tick(
         } else {
             cell.future_state = 0;
         }
-        cell.current_state = 1;
     }
-    println!("after: {}", cell.current_state);
+    //println!("after: {}", cell.current_state);
 
     return cell;
 }
@@ -207,18 +204,18 @@ fn main() {
                         cell_size as u32,
                     ));
                 }
-                //cell_tick(grid[row as usize][column as usize]);
+                cell_tick(grid[row as usize][column as usize], grid);
             }
         }
 
         for row in 0..grid_config::ROW_COUNT {
             for column in 0..grid_config::COLUMN_COUNT {
-                //cell_swap(grid[row as usize][column as usize]);
+                cell_swap(grid[row as usize][column as usize]);
             }
         }
 
         canvas.present();
 
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+        ::std::thread::sleep(Duration::new(1, 0));
     }
 }
