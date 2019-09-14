@@ -19,14 +19,14 @@ const moore_directions:[Point; 8] = [
 	Point{ x:0, y:-1 },
 ];
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 struct Point
 {
 	x:i32,
 	y:i32,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 struct Cell
 {
 	position:Point,
@@ -60,7 +60,9 @@ fn get_live_neighbour_count(cell:Cell, grid:[[Cell; grid_config::COLUMN_COUNT as
 			&& cell.neighbours[i].y >= 0
 			&& cell.neighbours[i].y < grid_config::COLUMN_COUNT
 		{
+			let current_state = grid[cell.neighbours[i].x as usize][cell.neighbours[i].y as usize].current_state;
 			neighbour_count += grid[cell.neighbours[i].x as usize][cell.neighbours[i].y as usize].current_state;
+			println!("current state: {}", current_state);
 		}
 	}
 
