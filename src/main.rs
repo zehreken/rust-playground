@@ -40,32 +40,32 @@ fn calculate_neighbours(x: i32, y: i32) -> [Point; 8] {
             y: moore_directions[0].y + y,
         },
         Point {
-            x: moore_directions[0].x + x,
-            y: moore_directions[0].y + y,
+            x: moore_directions[1].x + x,
+            y: moore_directions[1].y + y,
         },
         Point {
-            x: moore_directions[0].x + x,
-            y: moore_directions[0].y + y,
+            x: moore_directions[2].x + x,
+            y: moore_directions[2].y + y,
         },
         Point {
-            x: moore_directions[0].x + x,
-            y: moore_directions[0].y + y,
+            x: moore_directions[3].x + x,
+            y: moore_directions[3].y + y,
         },
         Point {
-            x: moore_directions[0].x + x,
-            y: moore_directions[0].y + y,
+            x: moore_directions[4].x + x,
+            y: moore_directions[4].y + y,
         },
         Point {
-            x: moore_directions[0].x + x,
-            y: moore_directions[0].y + y,
+            x: moore_directions[5].x + x,
+            y: moore_directions[5].y + y,
         },
         Point {
-            x: moore_directions[0].x + x,
-            y: moore_directions[0].y + y,
+            x: moore_directions[6].x + x,
+            y: moore_directions[6].y + y,
         },
         Point {
-            x: moore_directions[0].x + x,
-            y: moore_directions[0].y + y,
+            x: moore_directions[7].x + x,
+            y: moore_directions[7].y + y,
         },
     ];
 
@@ -78,7 +78,7 @@ fn get_live_neighbour_count(
 ) -> i32 {
     let mut neighbour_count: i32 = 0;
     for i in 0..8 {
-        println!("cell: {}", cell.position);
+        println!("cell: {:?}", cell.neighbours[i]);
         if cell.neighbours[i].x >= 0
             && cell.neighbours[i].x < grid_config::ROW_COUNT
             && cell.neighbours[i].y >= 0
@@ -150,7 +150,7 @@ fn main() {
             grid[row as usize][column as usize].position = Point { x: column, y: row };
             grid[row as usize][column as usize].neighbours = calculate_neighbours(column, row);
             grid[row as usize][column as usize].current_state =
-                if rng.gen_range(0, 4) < 1 { 0 } else { 1 };
+                if rng.gen_range(0, 2) < 1 { 0 } else { 1 };
         }
     }
 
