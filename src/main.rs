@@ -121,8 +121,10 @@ fn cell_tick(
     return cell;
 }
 
-fn cell_swap(mut cell: Cell) {
+fn cell_swap(mut cell: Cell) -> Cell {
     cell.current_state = cell.future_state;
+
+    return cell;
 }
 
 fn create_cell() -> Cell {
@@ -137,6 +139,7 @@ fn create_cell() -> Cell {
 }
 
 fn main() {
+    let mut step_count: i32 = 0;
     let mut rng = rand::thread_rng();
 
     let mut grid: [[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize] =
@@ -204,18 +207,24 @@ fn main() {
                         cell_size as u32,
                     ));
                 }
-                cell_tick(grid[row as usize][column as usize], grid);
+                grid[row as usize][column as usize] =
+                    cell_tick(grid[row as usize][column as usize], grid);
             }
         }
 
         for row in 0..grid_config::ROW_COUNT {
             for column in 0..grid_config::COLUMN_COUNT {
-                cell_swap(grid[row as usize][column as usize]);
+                //println!("{:#?}", grid[row as usize][column as usize]);
+                grid[row as usize][column as usize] =
+                    cell_swap(grid[row as usize][column as usize]);
+                //println!("{:#?}", grid[row as usize][column as usize]);
             }
         }
 
         canvas.present();
 
-        ::std::thread::sleep(Duration::new(1, 0));
+        ::std::thread::sleep(Duration::from_millis(100));
+        //println!("next step: {}", step_count);
+        step_count += 1;
     }
 }
