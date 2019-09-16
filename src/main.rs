@@ -196,8 +196,10 @@ fn main() {
         }
 
         // Render here
-        i = (i + 1) % 255;
-        canvas.set_draw_color(Color::RGB(i, 64, 255 - i));
+        //i = (i + 1) % 255;
+        //canvas.set_draw_color(Color::RGB(i, 64, 255 - i));
+        //canvas.clear();
+        canvas.set_draw_color(Color::RGB(255, 255, 255));
         canvas.clear();
 
         for row in 0..grid_config::ROW_COUNT {
