@@ -84,9 +84,8 @@ fn get_live_neighbour_count(
             && cell.neighbours[i].y < grid_config::COLUMN_COUNT
         {
             let current_state =
-                grid[cell.neighbours[i].x as usize][cell.neighbours[i].y as usize].current_state;
-            neighbour_count +=
-                grid[cell.neighbours[i].x as usize][cell.neighbours[i].y as usize].current_state;
+                grid[cell.neighbours[i].y as usize][cell.neighbours[i].x as usize].current_state;
+            neighbour_count += current_state;
         }
     }
 
@@ -98,9 +97,10 @@ fn cell_tick(
     mut cell: Cell,
     grid: [[Cell; grid_config::COLUMN_COUNT as usize]; grid_config::ROW_COUNT as usize],
 ) -> Cell {
+    let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
     //println!("before: {}", cell.current_state);
     if cell.current_state == 1 {
-        let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
+        //let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
         if live_neighbour_count < 2 {
             cell.future_state = 0;
         } else if live_neighbour_count == 2 || live_neighbour_count == 3 {
@@ -109,7 +109,7 @@ fn cell_tick(
             cell.future_state = 0;
         }
     } else {
-        let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
+        //let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
         if live_neighbour_count == 3 {
             cell.future_state = 1;
         } else {
@@ -154,6 +154,12 @@ fn main() {
         }
     }
 
+    grid[0][0].current_state = 1;
+    grid[1][1].current_state = 1;
+    grid[2][2].current_state = 1;
+    grid[3][3].current_state = 1;
+    grid[4][4].current_state = 1;
+    grid[1][3].current_state = 1;
     println!(
         "{}, {}, current_state: {}",
         grid[0][0].position.x, grid[0][0].position.y, grid[0][0].current_state
@@ -223,7 +229,7 @@ fn main() {
 
         canvas.present();
 
-        ::std::thread::sleep(Duration::from_millis(100));
+        ::std::thread::sleep(Duration::from_millis(20));
         //println!("next step: {}", step_count);
         step_count += 1;
     }
