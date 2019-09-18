@@ -31,6 +31,7 @@ struct Cell {
     neighbours: [Point; 8],
     current_state: i32,
     future_state: i32,
+    on_count: i32,
 }
 
 fn calculate_neighbours(x: i32, y: i32) -> [Point; 8] {
@@ -101,10 +102,13 @@ fn cell_tick(
     if cell.current_state == 1 {
         if live_neighbour_count < 2 {
             cell.future_state = 0;
+	    cell.on_count = 0;
         } else if live_neighbour_count == 2 || live_neighbour_count == 3 {
             cell.future_state = 1;
+	    cell.on_count += 1;
         } else {
             cell.future_state = 0;
+	    cell.on_count = 0;
         }
     } else {
         if live_neighbour_count == 3 {
@@ -129,6 +133,7 @@ fn create_cell() -> Cell {
         neighbours: calculate_neighbours(0, 0),
         current_state: 0,
         future_state: 0,
+	on_count: 0,
     };
 
     return cell;
@@ -197,8 +202,10 @@ fn main() {
 
         for row in 0..grid_config::ROW_COUNT {
             for column in 0..grid_config::COLUMN_COUNT {
-                if grid[row as usize][column as usize].current_state == 1 {
-                    canvas.set_draw_color(Color::RGB(0, 0, 0));
+	        let cell:Cell = grid[row as usize][column as usize];
+                if cell.current_state == 1 {
+		    let red:u8 = if 20 * cell.on_count > 255 { 255 } else { 20 * cell.on_count as u8 };
+                    canvas.set_draw_color(Color::RGB(red, 0, 0));
                     let cell_size: i32 = grid_config::CELL_SIZE;
                     canvas.fill_rect(Rect::new(
                         column * cell_size,
