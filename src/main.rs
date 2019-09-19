@@ -6,6 +6,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use std::time::Duration;
 mod grid;
+mod fps_utils;
 pub use crate::grid::grid_config;
 
 const MOORE_DIRECTIONS: [Point; 8] = [
@@ -180,6 +181,9 @@ fn main() {
         .position_centered()
         .build()
         .unwrap();
+
+    let ttf_context = sdl2::ttf::init();
+    let font = ttf_context.load_font("../emulogic.ttf", 12)?;
 
     let mut canvas = window.into_canvas().build().unwrap();
     canvas.set_draw_color(Color::RGB(0, 255, 255));
