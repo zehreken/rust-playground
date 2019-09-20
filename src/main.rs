@@ -4,9 +4,10 @@ extern crate sdl2;
 use rand::Rng;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use std::path::Path;
 use std::time::Duration;
-mod grid;
 mod fps_utils;
+mod grid;
 pub use crate::grid::grid_config;
 
 const MOORE_DIRECTIONS: [Point; 8] = [
@@ -103,13 +104,13 @@ fn cell_tick(
     if cell.current_state == 1 {
         if live_neighbour_count < 2 {
             cell.future_state = 0;
-	    cell.on_count = 0;
+            cell.on_count = 0;
         } else if live_neighbour_count == 2 || live_neighbour_count == 3 {
             cell.future_state = 1;
-	    cell.on_count += 1;
+            cell.on_count += 1;
         } else {
             cell.future_state = 0;
-	    cell.on_count = 0;
+            cell.on_count = 0;
         }
     } else {
         if live_neighbour_count == 3 {
@@ -134,7 +135,7 @@ fn create_cell() -> Cell {
         neighbours: calculate_neighbours(0, 0),
         current_state: 0,
         future_state: 0,
-	on_count: 0,
+        on_count: 0,
     };
 
     return cell;
@@ -182,13 +183,18 @@ fn main() {
         .build()
         .unwrap();
 
-    let ttf_context = sdl2::ttf::init();
-    let font = ttf_context.load_font("../emulogic.ttf", 12)?;
+    let ttf_context = sdl2::ttf::init().unwrap();
+    let font_path = Path::new("../emulogic.ttf");
+    let font = ttf_context.load_font(font_path, 12).unwrap();
 
     let mut canvas = window.into_canvas().build().unwrap();
     canvas.set_draw_color(Color::RGB(0, 255, 255));
     canvas.clear();
     canvas.present();
+
+    let surface = font.render("TTF Font Rendering Test");
+    let texture_creator = canvas.texture_creator();
+    let texture = texture_creator.create_texture_from_surface(&surface);
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
@@ -206,9 +212,13 @@ fn main() {
 
         for row in 0..grid_config::ROW_COUNT {
             for column in 0..grid_config::COLUMN_COUNT {
-	        let cell:Cell = grid[row as usize][column as usize];
+                let cell: Cell = grid[row as usize][column as usize];
                 if cell.current_state == 1 {
-		    let red:u8 = if 20 * cell.on_count > 255 { 255 } else { 20 * cell.on_count as u8 };
+                    let red: u8 = if 20 * cell.on_count > 255 {
+                        255
+                    } else {
+                        20 * cell.on_count as u8
+                    };
                     canvas.set_draw_color(Color::RGB(red, 0, 0));
                     let cell_size: i32 = grid_config::CELL_SIZE;
                     canvas.fill_rect(Rect::new(
@@ -229,6 +239,8 @@ fn main() {
                     cell_swap(grid[row as usize][column as usize]);
             }
         }
+
+        //canvas.copy(&texture, None, None);
 
         canvas.present();
 

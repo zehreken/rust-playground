@@ -1,3 +1,1 @@
-pub mod fps_utils {
-    
-}
+pub mod fps_utils {}
