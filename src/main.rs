@@ -4,6 +4,7 @@ extern crate sdl2;
 use rand::Rng;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use sdl2::surface::Surface;
 use std::path::Path;
 use std::time::Duration;
 mod fps_utils;
@@ -184,15 +185,18 @@ fn main() {
         .unwrap();
 
     let ttf_context = sdl2::ttf::init().unwrap();
-    let font_path = Path::new("../emulogic.ttf");
+    let font_path = Path::new("emulogic.ttf");
     let font = ttf_context.load_font(font_path, 12).unwrap();
+ //   font.set_style(sdl2::ttf::FontStyle::BOLD);
 
     let mut canvas = window.into_canvas().build().unwrap();
     canvas.set_draw_color(Color::RGB(0, 255, 255));
     canvas.clear();
     canvas.present();
 
-    let surface = font.render("TTF Font Rendering Test");
+    let surface: Surface = font
+        .render("TTF Text Rendering Test")
+        .solid(Color::RGBA(255, 0, 0, 255)).unwrap();
     let texture_creator = canvas.texture_creator();
     let texture = texture_creator.create_texture_from_surface(&surface);
 
