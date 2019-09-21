@@ -198,7 +198,7 @@ fn main() {
         .render("TTF Text Rendering Test")
         .solid(Color::RGBA(255, 0, 0, 255)).unwrap();
     let texture_creator = canvas.texture_creator();
-    let texture = texture_creator.create_texture_from_surface(&surface);
+    let texture = texture_creator.create_texture_from_surface(&surface).unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
@@ -244,7 +244,7 @@ fn main() {
             }
         }
 
-        //canvas.copy(&texture, None, None);
+        canvas.copy(&texture, None, None);
 
         canvas.present();
 
