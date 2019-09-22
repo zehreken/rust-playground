@@ -5,6 +5,7 @@ use rand::Rng;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::surface::Surface;
+use std::fmt;
 use std::path::Path;
 use std::time::Duration;
 mod fps_utils;
@@ -35,6 +36,12 @@ struct Cell {
     current_state: i32,
     future_state: i32,
     on_count: i32,
+}
+
+impl fmt::Display for Cell {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.current_state)
+    }
 }
 
 fn calculate_neighbours(x: i32, y: i32) -> [Point; 8] {
