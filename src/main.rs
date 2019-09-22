@@ -202,9 +202,9 @@ fn main() {
     let texture = texture_creator
         .create_texture_from_surface(&surface)
         .unwrap();
-    let textQuery = texture.query();
-    let textRect = Rect::new(0, 0, textQuery.width, textQuery.height);
-    println!("{}, {}", textQuery.width, textQuery.height);
+    let text_query = texture.query();
+    let text_rect = Rect::new(0, 0, text_query.width, text_query.height);
+    println!("{}, {}", text_query.width, text_query.height);
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
@@ -250,7 +250,7 @@ fn main() {
             }
         }
 
-        canvas.copy(&texture, None, textRect);
+        canvas.copy(&texture, None, text_rect);
 
         canvas.present();
 
