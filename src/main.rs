@@ -193,8 +193,8 @@ fn main() {
 
     let ttf_context = sdl2::ttf::init().unwrap();
     let font_path = Path::new("emulogic.ttf");
-    let font = ttf_context.load_font(font_path, 12).unwrap();
-    //   font.set_style(sdl2::ttf::FontStyle::BOLD);
+    let font = ttf_context.load_font(font_path, 8).unwrap();
+    //font.set_style(sdl2::ttf::FontStyle::BOLD);
 
     let mut canvas = window.into_canvas().build().unwrap();
     canvas.set_draw_color(Color::RGB(0, 255, 255));
@@ -203,7 +203,7 @@ fn main() {
 
     let surface: Surface = font
         .render("TTF Text Rendering Test")
-        .solid(Color::RGBA(0, 0, 0, 255))
+        .solid(Color::RGBA(255, 0, 255, 255))
         .unwrap();
     let texture_creator = canvas.texture_creator();
     let texture = texture_creator
