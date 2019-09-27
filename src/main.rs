@@ -38,13 +38,23 @@ struct Cell {
     on_count: i32,
 }
 
+impl fmt::Display for Point {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "x: {}, y: {}", self.x, self.y)
+    }
+}
+
 impl fmt::Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "current_state: {}\nfuture_state: {}\non_count: {}",
-            self.current_state, self.future_state, self.on_count
-        )
+        write!(f, "position: {}\n", self.position);
+        write!(f, "neighbours: [\n");
+        for i in 0..8 {
+            write!(f, "{}: {}\n", i, self.neighbours[i]);
+        }
+        write!(f, "]\n");
+        write!(f, "current_state: {}\n", self.current_state);
+        write!(f, "future_state: {}\n", self.future_state);
+        write!(f, "on_count: {}\n", self.on_count)
     }
 }
 
