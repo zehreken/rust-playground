@@ -40,7 +40,11 @@ struct Cell {
 
 impl fmt::Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.current_state)
+        write!(
+            f,
+            "current_state: {}\nfuture_state: {}\non_count: {}",
+            self.current_state, self.future_state, self.on_count
+        )
     }
 }
 
@@ -164,6 +168,7 @@ fn main() {
         }
     }
 
+    println!("{}", grid[0][0]);
     /*
     grid[0][0].current_state = 1;
     grid[1][1].current_state = 1;
@@ -211,7 +216,7 @@ fn main() {
         .unwrap();
     let text_query = texture.query();
     let text_rect = Rect::new(0, 0, text_query.width, text_query.height);
-    println!("{}, {}", text_query.width, text_query.height);
+    //    println!("{}, {}", text_query.width, text_query.height);
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
