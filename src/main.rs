@@ -7,7 +7,7 @@ use sdl2::rect::Rect;
 use sdl2::surface::Surface;
 use std::fmt;
 use std::path::Path;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 mod fps_utils;
 mod grid;
 pub use crate::grid::grid_config;
@@ -230,6 +230,11 @@ fn main() {
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
+    let mut now = Instant::now();
+    let delta_time = 0.0;
+    let mut time_as_second: u128 = 0;
+    let mut frames: i32 = 0;
+
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -237,6 +242,17 @@ fn main() {
                 _ => {}
             }
         }
+
+        let duration: Duration = Instant::now() - now;
+        time_as_second += duration.as_millis();
+        frames += 1;
+        if (time_as_second >= 1000) {
+            time_as_second -= 1000;
+            println!("frames: {}", frames);
+            frames = 0;
+        }
+//        println!("duration: {:?}, elapsed: {:?}", duration, now.elapsed());
+        now = Instant::now();
 
         // Render here
         canvas.set_draw_color(Color::RGB(255, 255, 255));
@@ -276,6 +292,6 @@ fn main() {
 
         canvas.present();
 
-        ::std::thread::sleep(Duration::from_millis(20));
+        ::std::thread::sleep(Duration::from_millis(0));
     }
 }
