@@ -46,14 +46,14 @@ impl fmt::Display for Point {
 
 impl fmt::Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "position: {}\n", self.position);
-        write!(f, "neighbours: [\n");
+        write!(f, "position: {}\n", self.position)?;
+        write!(f, "neighbours: [\n")?;
         for i in 0..8 {
-            write!(f, "{}: {}\n", i, self.neighbours[i]);
+            write!(f, "{}: {}\n", i, self.neighbours[i])?;
         }
-        write!(f, "]\n");
-        write!(f, "current_state: {}\n", self.current_state);
-        write!(f, "future_state: {}\n", self.future_state);
+        write!(f, "]\n")?;
+        write!(f, "current_state: {}\n", self.current_state)?;
+        write!(f, "future_state: {}\n", self.future_state)?;
         write!(f, "on_count: {}\n", self.on_count)
     }
 }
@@ -231,7 +231,7 @@ fn main() {
     let mut event_pump = sdl_context.event_pump().unwrap();
 
     let mut now = Instant::now();
-    let delta_time = 0.0;
+    //let delta_time = 0.0;
     let mut time_as_second: u128 = 0;
     let mut frames: i32 = 0;
 
@@ -246,12 +246,12 @@ fn main() {
         let duration: Duration = Instant::now() - now;
         time_as_second += duration.as_millis();
         frames += 1;
-        if (time_as_second >= 1000) {
+        if time_as_second >= 1000 {
             time_as_second -= 1000;
             println!("frames: {}", frames);
             frames = 0;
         }
-//        println!("duration: {:?}, elapsed: {:?}", duration, now.elapsed());
+        //        println!("duration: {:?}, elapsed: {:?}", duration, now.elapsed());
         now = Instant::now();
 
         // Render here
