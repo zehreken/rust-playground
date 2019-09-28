@@ -216,12 +216,12 @@ fn main() {
     canvas.clear();
     canvas.present();
 
-    let surface: Surface = font
-        .render("TTF Text Rendering Test")
+    let mut surface: Surface = font
+        .render("FPS: 000")
         .solid(Color::RGBA(255, 0, 255, 255))
         .unwrap();
     let texture_creator = canvas.texture_creator();
-    let texture = texture_creator
+    let mut texture = texture_creator
         .create_texture_from_surface(&surface)
         .unwrap();
     let text_query = texture.query();
@@ -249,6 +249,12 @@ fn main() {
         if time_as_second >= 1000 {
             time_as_second -= 1000;
             println!("frames: {}", frames);
+            surface = font
+                .render(&format!("FPS: {}", frames))
+                .solid(Color::RGBA(255, 0, 255, 255))
+                .unwrap();
+            texture = texture_creator.create_texture_from_surface(&surface)
+                .unwrap();
             frames = 0;
         }
         //        println!("duration: {:?}, elapsed: {:?}", duration, now.elapsed());
