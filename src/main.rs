@@ -8,6 +8,7 @@ use sdl2::surface::Surface;
 use std::fmt;
 use std::path::Path;
 use std::time::{Duration, Instant};
+mod cell;
 mod fps_utils;
 mod grid;
 pub use crate::grid::grid_config;
@@ -179,7 +180,7 @@ fn main() {
     }
 
     println!("{}", grid[0][0]);
-    
+
     /*
     grid[0][0].current_state = 1;
     grid[1][1].current_state = 1;
@@ -254,7 +255,8 @@ fn main() {
                 .render(&format!("FPS: {}", frames))
                 .solid(Color::RGBA(255, 0, 255, 255))
                 .unwrap();
-            texture = texture_creator.create_texture_from_surface(&surface)
+            texture = texture_creator
+                .create_texture_from_surface(&surface)
                 .unwrap();
             frames = 0;
         }
