@@ -179,6 +179,7 @@ fn main() {
     }
 
     println!("{}", grid[0][0]);
+    
     /*
     grid[0][0].current_state = 1;
     grid[1][1].current_state = 1;
@@ -248,7 +249,7 @@ fn main() {
         frames += 1;
         if time_as_second >= 1000 {
             time_as_second -= 1000;
-            println!("frames: {}", frames);
+            //println!("frames: {}", frames);
             surface = font
                 .render(&format!("FPS: {}", frames))
                 .solid(Color::RGBA(255, 0, 255, 255))
