@@ -1,5 +1,17 @@
 pub mod cell {
     use std::fmt;
+
+    const MOORE_DIRECTIONS: [Point; 8] = [
+        Point { x: -1, y: -1 },
+        Point { x: -1, y: 0 },
+        Point { x: -1, y: 1 },
+        Point { x: 0, y: 1 },
+        Point { x: 1, y: 1 },
+        Point { x: 1, y: 0 },
+        Point { x: 1, y: -1 },
+        Point { x: 0, y: -1 },
+    ];
+
     #[derive(Debug, Copy, Clone)]
     pub struct Point {
         pub x: i32,
@@ -19,6 +31,7 @@ pub mod cell {
             write!(f, "x: {}, y: {}", self.x, self.y)
         }
     }
+
     impl fmt::Display for Cell {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             write!(f, "position {}\n", self.position)?;
@@ -32,5 +45,55 @@ pub mod cell {
             write!(f, "on_count: {}\n", self.on_count)
         }
     }
-    fn setPosition(cell: Cell, row: i32, column: i32) {}
+
+    pub fn create_cell() -> Cell {
+        let cell = Cell {
+            position: Point { x: 0, y: 0 },
+            neighbours: calculate_neighbours(0, 0),
+            current_state: 0,
+            future_state: 0,
+            on_count: 0,
+        };
+
+        return cell;
+    }
+
+    pub fn calculate_neighbours(x: i32, y: i32) -> [Point; 8] {
+        let neighbours: [Point; 8] = [
+            Point {
+                x: MOORE_DIRECTIONS[0].x + x,
+                y: MOORE_DIRECTIONS[0].y + y,
+            },
+            Point {
+                x: MOORE_DIRECTIONS[1].x + x,
+                y: MOORE_DIRECTIONS[1].y + y,
+            },
+            Point {
+                x: MOORE_DIRECTIONS[2].x + x,
+                y: MOORE_DIRECTIONS[2].y + y,
+            },
+            Point {
+                x: MOORE_DIRECTIONS[3].x + x,
+                y: MOORE_DIRECTIONS[3].y + y,
+            },
+            Point {
+                x: MOORE_DIRECTIONS[4].x + x,
+                y: MOORE_DIRECTIONS[4].y + y,
+            },
+            Point {
+                x: MOORE_DIRECTIONS[5].x + x,
+                y: MOORE_DIRECTIONS[5].y + y,
+            },
+            Point {
+                x: MOORE_DIRECTIONS[6].x + x,
+                y: MOORE_DIRECTIONS[6].y + y,
+            },
+            Point {
+                x: MOORE_DIRECTIONS[7].x + x,
+                y: MOORE_DIRECTIONS[7].y + y,
+            },
+        ];
+
+        return neighbours;
+    }
 }
