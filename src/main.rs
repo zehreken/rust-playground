@@ -5,14 +5,13 @@ use rand::Rng;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::surface::Surface;
-use std::fmt;
 use std::path::Path;
 use std::time::{Duration, Instant};
 mod cell;
 mod fps_utils;
 mod grid;
-pub use crate::grid::grid_config::*;
 pub use crate::cell::cell::*;
+pub use crate::grid::grid_config::*;
 
 const MOORE_DIRECTIONS: [Point; 8] = [
     Point { x: -1, y: -1 },
@@ -242,7 +241,7 @@ fn main() {
                         row * cell_size,
                         cell_size as u32,
                         cell_size as u32,
-                    ));
+                    )).unwrap();
                 }
                 grid[row as usize][column as usize] =
                     cell_tick(grid[row as usize][column as usize], grid);
@@ -256,7 +255,7 @@ fn main() {
             }
         }
 
-        canvas.copy(&texture, None, text_rect);
+        canvas.copy(&texture, None, text_rect).unwrap();
 
         canvas.present();
 
