@@ -1,17 +1,17 @@
 pub mod cell {
     use std::fmt;
     #[derive(Debug, Copy, Clone)]
-    struct Point {
-        x: i32,
-        y: i32,
+    pub struct Point {
+        pub x: i32,
+        pub y: i32,
     }
     #[derive(Debug, Copy, Clone)]
-    struct Cell {
-        position: Point,
-        neighbours: [Point; 8],
-        current_state: i32,
-        future_state: i32,
-        on_count: i32,
+    pub struct Cell {
+        pub position: Point,
+        pub neighbours: [Point; 8],
+        pub current_state: i32,
+        pub future_state: i32,
+        pub on_count: i32,
     }
 
     impl fmt::Display for Point {

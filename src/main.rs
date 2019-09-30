@@ -11,8 +11,8 @@ use std::time::{Duration, Instant};
 mod cell;
 mod fps_utils;
 mod grid;
-pub use crate::grid::grid_config;
 pub use crate::grid::grid_config::*;
+pub use crate::cell::cell::*;
 
 const MOORE_DIRECTIONS: [Point; 8] = [
     Point { x: -1, y: -1 },
@@ -24,41 +24,6 @@ const MOORE_DIRECTIONS: [Point; 8] = [
     Point { x: 1, y: -1 },
     Point { x: 0, y: -1 },
 ];
-
-#[derive(Debug, Copy, Clone)]
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-#[derive(Debug, Copy, Clone)]
-struct Cell {
-    position: Point,
-    neighbours: [Point; 8],
-    current_state: i32,
-    future_state: i32,
-    on_count: i32,
-}
-
-impl fmt::Display for Point {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "x: {}, y: {}", self.x, self.y)
-    }
-}
-
-impl fmt::Display for Cell {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "position: {}\n", self.position)?;
-        write!(f, "neighbours: [\n")?;
-        for i in 0..8 {
-            write!(f, "{}: {}\n", i, self.neighbours[i])?;
-        }
-        write!(f, "]\n")?;
-        write!(f, "current_state: {}\n", self.current_state)?;
-        write!(f, "future_state: {}\n", self.future_state)?;
-        write!(f, "on_count: {}\n", self.on_count)
-    }
-}
 
 fn calculate_neighbours(x: i32, y: i32) -> [Point; 8] {
     let neighbours: [Point; 8] = [
