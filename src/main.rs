@@ -12,6 +12,7 @@ mod fps_utils;
 mod grid;
 pub use crate::cell::cell::*;
 pub use crate::grid::grid_config::*;
+pub use crate::fps_utils::fps_utils::*;
 
 fn get_live_neighbour_count(
     cell: Cell,
@@ -80,6 +81,8 @@ fn main() {
     }
 
     println!("{}", grid[0][0]);
+
+    let fps_counter = FpsCounter::new();
 
     /*
     grid[0][0].current_state = 1;
