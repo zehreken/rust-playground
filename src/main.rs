@@ -11,8 +11,8 @@ mod cell;
 mod fps_utils;
 mod grid;
 pub use crate::cell::cell::*;
-pub use crate::grid::grid_config::*;
 pub use crate::fps_utils::fps_utils::*;
+pub use crate::grid::grid_config::*;
 
 fn get_live_neighbour_count(
     cell: Cell,
@@ -82,7 +82,7 @@ fn main() {
 
     println!("{}", grid[0][0]);
 
-    let fps_counter = FpsCounter::new();
+    let mut fps_counter = FpsCounter::new();
 
     /*
     grid[0][0].current_state = 1;
@@ -132,9 +132,6 @@ fn main() {
     let mut event_pump = sdl_context.event_pump().unwrap();
 
     let mut now = Instant::now();
-    //let delta_time = 0.0;
-    let mut time_as_second: u128 = 0;
-    let mut frames: i32 = 0;
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -145,21 +142,16 @@ fn main() {
         }
 
         let duration: Duration = Instant::now() - now;
-        time_as_second += duration.as_millis();
-        frames += 1;
-        if time_as_second >= 1000 {
-            time_as_second -= 1000;
-            //println!("frames: {}", frames);
+        let fps_count = fps_counter.tick(duration.as_millis());
+        if fps_count > 0 {
             surface = font
-                .render(&format!("FPS: {}", frames))
+                .render(&format!("FPS: {}", fps_count))
                 .solid(Color::RGBA(255, 0, 255, 255))
                 .unwrap();
             texture = texture_creator
                 .create_texture_from_surface(&surface)
                 .unwrap();
-            frames = 0;
         }
-        //        println!("duration: {:?}, elapsed: {:?}", duration, now.elapsed());
         now = Instant::now();
 
         // Render here
