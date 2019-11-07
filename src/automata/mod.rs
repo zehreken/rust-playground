@@ -30,6 +30,7 @@ fn get_live_neighbour_count(
 
     return neighbour_count;
 }
+
 fn cell_tick(mut cell: Cell, grid: [[Cell; COLUMN_COUNT as usize]; ROW_COUNT as usize]) -> Cell {
     let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
 
@@ -61,7 +62,7 @@ fn cell_swap(mut cell: Cell) -> Cell {
     return cell;
 }
 
-pub fn automata_start() {
+pub fn start_automata() {
     let mut rng = rand::thread_rng();
 
     let mut grid: [[Cell; COLUMN_COUNT as usize]; ROW_COUNT as usize] =
@@ -98,7 +99,7 @@ pub fn automata_start() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     let window = video_subsystem
-        .window("Game", SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32)
+        .window("automata", SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32)
         .position_centered()
         .build()
         .unwrap();
