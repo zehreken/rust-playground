@@ -15,8 +15,8 @@ pub fn start_fast_type() {
         .unwrap();
 
     let ttf_context = sdl2::ttf::init().unwrap();
-    let font_path = Path::new("emulogic.ttf");
-    let font = ttf_context.load_font(font_path, 8).unwrap();
+    let font_path = Path::new("VeraMono.ttf");
+    let font = ttf_context.load_font(font_path, 18).unwrap();
 
     let mut canvas = window.into_canvas().build().unwrap();
     canvas.set_draw_color(Color::RGB(0, 0, 0));
@@ -26,7 +26,8 @@ pub fn start_fast_type() {
     let test_text = "There are two motives for reading a book; one, that you enjoy it; the other, that you can boast about it.";
     let mut surface: Surface = font
         .render(test_text)
-        .solid(Color::RGB(255, 255, 255))
+        .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
+        // .solid(Color::RGB(255, 255, 255))
         .unwrap();
     let texture_creator = canvas.texture_creator();
     let mut texture = texture_creator
