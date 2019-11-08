@@ -11,6 +11,7 @@ pub fn start_fast_type() {
     const HEIGHT: u32 = 512;
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
+    video_subsystem.text_input().start();
     let window = video_subsystem
         .window("fast_type", WIDTH, HEIGHT)
         .position_centered()
@@ -36,7 +37,6 @@ pub fn start_fast_type() {
     let mut texture = texture_creator
         .create_texture_from_surface(&surface)
         .unwrap();
-
     let mut text_query = texture.query();
     let text_rect = Rect::new(0, 0, text_query.width, text_query.height);
 
@@ -54,7 +54,17 @@ pub fn start_fast_type() {
     let mut prev_keys = HashSet::new();
     let mut event_pump = sdl_context.event_pump().unwrap();
     let mut is_shift_pressed: bool = false;
-    let astr = "A";
+
+    let mut input = "t".to_string();
+    surface = font
+        .render(&input)
+        .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
+        .unwrap();
+    let mut input_texture = texture_creator
+        .create_texture_from_surface(&surface)
+        .unwrap();
+    text_query = input_texture.query();
+    let input_rect = Rect::new(0, 250, text_query.width, text_query.height);
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -74,10 +84,12 @@ pub fn start_fast_type() {
         // Get the difference between the new and old sets.
         let new_keys = &keys - &prev_keys;
         let old_keys = &prev_keys - &keys;
+        let mut temp_input = "".to_string();
 
-        if !new_keys.is_empty() || !old_keys.is_empty() {
-            println!("new_keys: {:?}\told_keys:{:?}", new_keys, old_keys);
-        }
+        // if !new_keys.is_empty() || !old_keys.is_empty() {
+        //     println!("new_keys: {:?}\told_keys:{:?}", new_keys, old_keys);
+        //     println!("{:?}", input);
+        // }
 
         if new_keys.contains(&Keycode::LShift) || new_keys.contains(&Keycode::RShift) {
             is_shift_pressed = true;
@@ -86,6 +98,15 @@ pub fn start_fast_type() {
             is_shift_pressed = false;
         }
 
+        for key in &new_keys {
+            if is_shift_pressed {
+                temp_input.push_str(&key.to_string());
+            } else {
+                temp_input.push_str(&key.to_string().to_lowercase());
+            }
+        }
+        input.push_str(&temp_input);
+
         prev_keys = keys;
 
         canvas.copy(&texture, None, text_rect).unwrap();
@@ -93,6 +114,17 @@ pub fn start_fast_type() {
         if is_shift_pressed {
             canvas.copy(&shift_texture, None, shift_rect).unwrap();
         }
+
+        surface = font
+            .render(&input)
+            .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
+            .unwrap();
+        input_texture = texture_creator
+            .create_texture_from_surface(&surface)
+            .unwrap();
+        text_query = input_texture.query();
+        let input_rect = Rect::new(0, 250, text_query.width, text_query.height);
+        canvas.copy(&input_texture, None, input_rect).unwrap();
 
         canvas.present();
 
