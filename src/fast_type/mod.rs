@@ -1,10 +1,12 @@
 use sdl2::keyboard::Keycode;
+use sdl2::keyboard::Scancode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::surface::Surface;
 use std::collections::HashSet;
 use std::path::Path;
 use std::time::Duration;
+use sdl2::keyboard::TextInputUtil;
 
 pub fn start_fast_type() {
     const WIDTH: u32 = 512;
@@ -12,6 +14,7 @@ pub fn start_fast_type() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     video_subsystem.text_input().start();
+
     let window = video_subsystem
         .window("fast_type", WIDTH, HEIGHT)
         .position_centered()
@@ -70,10 +73,24 @@ pub fn start_fast_type() {
         for event in event_pump.poll_iter() {
             match event {
                 sdl2::event::Event::Quit { .. } => break 'running,
-                // sdl2::event::Event::KeyDown { keycode: Some(Keycode), .. } => println!("{}", "a"),
+                sdl2::event::Event::KeyDown {
+                    keycode: Some(Keycode::Escape),
+                    ..
+                } => break 'running,
+                sdl2::event::Event::TextInput {timestamp: _, window_id: _, text: input} => {
+                    println!("{}", input);
+                },
                 _ => {}
             }
         }
+
+        /*
+        TextInput(_, _, ref txt) => {
+                out = None;
+                println!("TextInputEvent: {}", txt);
+                break;
+            },
+        */
         // Create a set of pressed Keys.
         let keys = event_pump
             .keyboard_state()
@@ -81,15 +98,22 @@ pub fn start_fast_type() {
             .filter_map(Keycode::from_scancode)
             .collect();
 
+        let scanned_keys: HashSet<Scancode> =
+            event_pump.keyboard_state().pressed_scancodes().collect();
+            
+        if !scanned_keys.is_empty() {
+            // println!("scanned keys: {:?}", scanned_keys);
+        }
+
         // Get the difference between the new and old sets.
         let new_keys = &keys - &prev_keys;
         let old_keys = &prev_keys - &keys;
         let mut temp_input = "".to_string();
 
-        // if !new_keys.is_empty() || !old_keys.is_empty() {
-        //     println!("new_keys: {:?}\told_keys:{:?}", new_keys, old_keys);
-        //     println!("{:?}", input);
-        // }
+        if !new_keys.is_empty() || !old_keys.is_empty() {
+            // println!("new_keys: {:?}\told_keys:{:?}", new_keys, old_keys);
+            // println!("{:?}", input);
+        }
 
         if new_keys.contains(&Keycode::LShift) || new_keys.contains(&Keycode::RShift) {
             is_shift_pressed = true;
@@ -133,4 +157,6 @@ pub fn start_fast_type() {
 
         ::std::thread::sleep(Duration::from_millis(20));
     }
+
+    video_subsystem.text_input().stop();
 }
