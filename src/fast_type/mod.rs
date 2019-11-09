@@ -19,7 +19,7 @@ pub fn start_fast_type() {
         .unwrap();
 
     let ttf_context = sdl2::ttf::init().unwrap();
-    let font_path = Path::new("VeraMono.ttf");
+    let font_path = Path::new("fonts/VeraMono.ttf");
     let font = ttf_context.load_font(font_path, 18).unwrap();
 
     let mut canvas = window.into_canvas().build().unwrap();

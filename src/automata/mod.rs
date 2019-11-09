@@ -105,7 +105,7 @@ pub fn start_automata() {
         .unwrap();
 
     let ttf_context = sdl2::ttf::init().unwrap();
-    let font_path = Path::new("emulogic.ttf");
+    let font_path = Path::new("fonts/emulogic.ttf");
     let font = ttf_context.load_font(font_path, 8).unwrap();
     //font.set_style(sdl2::ttf::FontStyle::BOLD);
 
