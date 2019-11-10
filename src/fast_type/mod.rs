@@ -1,12 +1,12 @@
 use sdl2::keyboard::Keycode;
 use sdl2::keyboard::Scancode;
+use sdl2::keyboard::TextInputUtil;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::surface::Surface;
 use std::collections::HashSet;
 use std::path::Path;
 use std::time::Duration;
-use sdl2::keyboard::TextInputUtil;
 
 pub fn start_fast_type() {
     const WIDTH: u32 = 512;
@@ -54,20 +54,11 @@ pub fn start_fast_type() {
     text_query = shift_texture.query();
     let shift_rect = Rect::new(0, 200, text_query.width, text_query.height);
 
-    let mut prev_keys = HashSet::new();
     let mut event_pump = sdl_context.event_pump().unwrap();
     let mut is_shift_pressed: bool = false;
 
-    let mut input = "t".to_string();
-    surface = font
-        .render(&input)
-        .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
-        .unwrap();
-    let mut input_texture = texture_creator
-        .create_texture_from_surface(&surface)
-        .unwrap();
-    text_query = input_texture.query();
-    let input_rect = Rect::new(0, 250, text_query.width, text_query.height);
+    let mut input = "".to_string();
+    let mut input_texture;
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -77,61 +68,24 @@ pub fn start_fast_type() {
                     keycode: Some(Keycode::Escape),
                     ..
                 } => break 'running,
-                sdl2::event::Event::TextInput {timestamp: _, window_id: _, text: input} => {
-                    println!("{}", input);
-                },
+                sdl2::event::Event::KeyDown {
+                    keycode: Some(Keycode::Backspace),
+                    ..
+                } => {
+                    if input.len() > 0 {
+                        input.pop();
+                    }
+                }
+                sdl2::event::Event::TextInput {
+                    timestamp: _,
+                    window_id: _,
+                    text: text,
+                } => {
+                    input.push_str(&text);
+                }
                 _ => {}
             }
         }
-
-        /*
-        TextInput(_, _, ref txt) => {
-                out = None;
-                println!("TextInputEvent: {}", txt);
-                break;
-            },
-        */
-        // Create a set of pressed Keys.
-        let keys = event_pump
-            .keyboard_state()
-            .pressed_scancodes()
-            .filter_map(Keycode::from_scancode)
-            .collect();
-
-        let scanned_keys: HashSet<Scancode> =
-            event_pump.keyboard_state().pressed_scancodes().collect();
-            
-        if !scanned_keys.is_empty() {
-            // println!("scanned keys: {:?}", scanned_keys);
-        }
-
-        // Get the difference between the new and old sets.
-        let new_keys = &keys - &prev_keys;
-        let old_keys = &prev_keys - &keys;
-        let mut temp_input = "".to_string();
-
-        if !new_keys.is_empty() || !old_keys.is_empty() {
-            // println!("new_keys: {:?}\told_keys:{:?}", new_keys, old_keys);
-            // println!("{:?}", input);
-        }
-
-        if new_keys.contains(&Keycode::LShift) || new_keys.contains(&Keycode::RShift) {
-            is_shift_pressed = true;
-        }
-        if old_keys.contains(&Keycode::LShift) || old_keys.contains(&Keycode::RShift) {
-            is_shift_pressed = false;
-        }
-
-        for key in &new_keys {
-            if is_shift_pressed {
-                temp_input.push_str(&key.to_string());
-            } else {
-                temp_input.push_str(&key.to_string().to_lowercase());
-            }
-        }
-        input.push_str(&temp_input);
-
-        prev_keys = keys;
 
         canvas.copy(&texture, None, text_rect).unwrap();
 
@@ -139,16 +93,18 @@ pub fn start_fast_type() {
             canvas.copy(&shift_texture, None, shift_rect).unwrap();
         }
 
-        surface = font
-            .render(&input)
-            .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
-            .unwrap();
-        input_texture = texture_creator
-            .create_texture_from_surface(&surface)
-            .unwrap();
-        text_query = input_texture.query();
-        let input_rect = Rect::new(0, 250, text_query.width, text_query.height);
-        canvas.copy(&input_texture, None, input_rect).unwrap();
+        if input.len() > 0 {
+            surface = font
+                .render(&input)
+                .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
+                .unwrap();
+            input_texture = texture_creator
+                .create_texture_from_surface(&surface)
+                .unwrap();
+            text_query = input_texture.query();
+            let input_rect = Rect::new(0, 250, text_query.width, text_query.height);
+            canvas.copy(&input_texture, None, input_rect).unwrap();
+        }
 
         canvas.present();
 
