@@ -20,7 +20,7 @@ pub fn start_fast_type() {
 
     let ttf_context = sdl2::ttf::init().unwrap();
     let font_path = Path::new("fonts/VeraMono.ttf");
-    let font = ttf_context.load_font(font_path, 18).unwrap();
+    let font = ttf_context.load_font(font_path, 16).unwrap();
 
     let mut canvas = window.into_canvas().build().unwrap();
     canvas.set_draw_color(Color::RGB(0, 0, 0));
@@ -28,6 +28,14 @@ pub fn start_fast_type() {
     canvas.present();
 
     let test_text = "There are two motives for reading a book; one, that you enjoy it; the other, that you can boast about it.";
+    let words: Vec<&str> = test_text.split(' ').collect();
+    let word_count = words.len();
+    let mut current_word_index = 0;
+    let mut current_word = "".to_string();
+
+    for word in &words {
+        println!("{}", word);
+    }
     let mut surface: Surface = font
         .render(test_text)
         .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
@@ -39,17 +47,6 @@ pub fn start_fast_type() {
         .unwrap();
     let mut text_query = texture.query();
     let text_rect = Rect::new(0, 0, text_query.width, text_query.height);
-
-    // let shift_text = "SHIFT";
-    // surface = font
-    //     .render(shift_text)
-    //     .blended(Color::RGB(255, 255, 255))
-    //     .unwrap();
-    // let mut shift_texture = texture_creator
-    //     .create_texture_from_surface(&surface)
-    //     .unwrap();
-    // text_query = shift_texture.query();
-    // let shift_rect = Rect::new(0, 200, text_query.width, text_query.height);
 
     let mut event_pump = sdl_context.event_pump().unwrap();
     // let mut is_shift_pressed: bool = false;
@@ -73,12 +70,31 @@ pub fn start_fast_type() {
                         input.pop();
                     }
                 }
+                sdl2::event::Event::KeyDown {
+                    keycode: Some(Keycode::Space),
+                    ..
+                } => {
+                    if current_word.len() > 0 {
+                        println!("Next word!");
+                        current_word = "".to_string();
+                        current_word_index += 1;
+                    }
+                }
                 sdl2::event::Event::TextInput {
                     timestamp: _,
                     window_id: _,
                     text: text,
                 } => {
+                    if text != " " {
+                        current_word.push_str(&text);
+                    }
                     input.push_str(&text);
+                    println!(
+                        "check: {:?}, {:?}, {:?}",
+                        words[current_word_index] == current_word,
+                        words[current_word_index],
+                        current_word
+                    );
                 }
                 _ => {}
             }
