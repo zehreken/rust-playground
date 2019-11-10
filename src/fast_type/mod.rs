@@ -1,10 +1,7 @@
 use sdl2::keyboard::Keycode;
-use sdl2::keyboard::Scancode;
-use sdl2::keyboard::TextInputUtil;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::surface::Surface;
-use std::collections::HashSet;
 use std::path::Path;
 use std::time::Duration;
 
@@ -43,19 +40,19 @@ pub fn start_fast_type() {
     let mut text_query = texture.query();
     let text_rect = Rect::new(0, 0, text_query.width, text_query.height);
 
-    let shift_text = "SHIFT";
-    surface = font
-        .render(shift_text)
-        .blended(Color::RGB(255, 255, 255))
-        .unwrap();
-    let mut shift_texture = texture_creator
-        .create_texture_from_surface(&surface)
-        .unwrap();
-    text_query = shift_texture.query();
-    let shift_rect = Rect::new(0, 200, text_query.width, text_query.height);
+    // let shift_text = "SHIFT";
+    // surface = font
+    //     .render(shift_text)
+    //     .blended(Color::RGB(255, 255, 255))
+    //     .unwrap();
+    // let mut shift_texture = texture_creator
+    //     .create_texture_from_surface(&surface)
+    //     .unwrap();
+    // text_query = shift_texture.query();
+    // let shift_rect = Rect::new(0, 200, text_query.width, text_query.height);
 
     let mut event_pump = sdl_context.event_pump().unwrap();
-    let mut is_shift_pressed: bool = false;
+    // let mut is_shift_pressed: bool = false;
 
     let mut input = "".to_string();
     let mut input_texture;
@@ -89,9 +86,9 @@ pub fn start_fast_type() {
 
         canvas.copy(&texture, None, text_rect).unwrap();
 
-        if is_shift_pressed {
-            canvas.copy(&shift_texture, None, shift_rect).unwrap();
-        }
+        // if is_shift_pressed {
+        //     canvas.copy(&shift_texture, None, shift_rect).unwrap();
+        // }
 
         if input.len() > 0 {
             surface = font
