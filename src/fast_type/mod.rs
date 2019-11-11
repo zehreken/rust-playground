@@ -6,11 +6,12 @@ use std::path::Path;
 use std::time::Duration;
 
 pub fn start_fast_type() {
-    const WIDTH: u32 = 512;
-    const HEIGHT: u32 = 512;
+    const WIDTH: u32 = 500;
+    const HEIGHT: u32 = 500;
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     video_subsystem.text_input().start();
+    video_subsystem.text_input().set_rect(Rect::new(0, 250, 500, 250));
 
     let window = video_subsystem
         .window("fast_type", WIDTH, HEIGHT)
@@ -38,7 +39,7 @@ pub fn start_fast_type() {
     }
     let mut surface: Surface = font
         .render(test_text)
-        .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
+        .blended_wrapped(Color::RGB(0, 0, 0), WIDTH)
         // .solid(Color::RGB(255, 255, 255))
         .unwrap();
     let texture_creator = canvas.texture_creator();
@@ -53,6 +54,9 @@ pub fn start_fast_type() {
 
     let mut input = "".to_string();
     let mut input_texture;
+
+    let mut cursor_rect_x = 0;
+    let mut cursor_rect_y = 250;
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -106,10 +110,27 @@ pub fn start_fast_type() {
         //     canvas.copy(&shift_texture, None, shift_rect).unwrap();
         // }
 
+        canvas.set_draw_color(Color::RGB(0, 0, 0));
+        cursor_rect_x = input.len() % 50 * 10;
+        cursor_rect_y = 250 + input.len() / 50 * 19;
+        canvas
+            .fill_rect(Rect::new(
+                cursor_rect_x as i32,
+                cursor_rect_y as i32,
+                10,
+                16,
+            ))
+            .unwrap();
+        // for i in 0..20 {
+        //     canvas.fill_rect(Rect::new(i * 20, 250, 10, 16)).unwrap();
+        // }
+
+        canvas.set_draw_color(Color::RGB(255, 255, 255));
+
         if input.len() > 0 {
             surface = font
                 .render(&input)
-                .blended_wrapped(Color::RGB(255, 255, 255), WIDTH)
+                .blended_wrapped(Color::RGB(0, 0, 0), WIDTH)
                 .unwrap();
             input_texture = texture_creator
                 .create_texture_from_surface(&surface)
@@ -121,7 +142,6 @@ pub fn start_fast_type() {
 
         canvas.present();
 
-        // canvas.set_draw_color(Color::RGB(0, 0, 0));
         canvas.clear();
 
         ::std::thread::sleep(Duration::from_millis(20));
