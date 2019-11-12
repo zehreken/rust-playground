@@ -26,8 +26,8 @@ pub fn start_framebuffer() {
     let mut framebuffer = texture_creator
         .create_texture(None, TextureAccess::Static, WIDTH, HEIGHT)
         .unwrap();
-    let ys: [i32; 500] = [0; 500];
-    let pixels: [u8; WIDTH as usize * HEIGHT as usize] = [255; WIDTH as usize * HEIGHT as usize];
+
+    let pixels: [u8; WIDTH as usize * HEIGHT as usize] = [20; WIDTH as usize * HEIGHT as usize];
     framebuffer.update(None, &pixels, 1).unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
@@ -47,6 +47,9 @@ pub fn start_framebuffer() {
         canvas
             .copy(&framebuffer, None, Rect::new(0, 0, WIDTH, HEIGHT))
             .unwrap();
+
+        canvas.present();
+        canvas.clear();
 
         std::thread::sleep(Duration::from_millis(20));
     }
