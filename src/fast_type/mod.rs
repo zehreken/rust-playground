@@ -11,7 +11,6 @@ pub fn start_fast_type() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     video_subsystem.text_input().start();
-    video_subsystem.text_input().set_rect(Rect::new(0, 250, 500, 250));
 
     let window = video_subsystem
         .window("fast_type", WIDTH, HEIGHT)
