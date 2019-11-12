@@ -7,7 +7,7 @@ use std::time::Duration;
 
 pub fn start_fast_type() {
     const WIDTH: u32 = 500;
-    const HEIGHT: u32 = 500;
+    const HEIGHT: u32 = 200;
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     video_subsystem.text_input().start();
@@ -28,8 +28,8 @@ pub fn start_fast_type() {
     canvas.clear();
     canvas.present();
 
-    let test_text = "There are two motives for reading a book; one, that you enjoy it; the other, that you can boast about it.";
-    let words: Vec<&str> = test_text.split(' ').collect();
+    let sample_text = "There are two motives for reading a book; one, that you enjoy it; the other, that you can boast about it.";
+    let words: Vec<&str> = sample_text.split(' ').collect();
     let word_count = words.len();
     let mut current_word_index = 0;
     let mut current_word = "".to_string();
@@ -38,8 +38,8 @@ pub fn start_fast_type() {
         println!("{}", word);
     }
     let mut surface: Surface = font
-        .render(test_text)
-        .blended_wrapped(Color::RGB(0, 0, 0), WIDTH)
+        .render(sample_text)
+        .blended_wrapped(Color::RGB(150, 150, 150), WIDTH)
         // .solid(Color::RGB(255, 255, 255))
         .unwrap();
     let texture_creator = canvas.texture_creator();
@@ -56,8 +56,8 @@ pub fn start_fast_type() {
     let mut input = cursor.to_string();
     let mut input_texture;
 
-    let mut cursor_rect_x = 0;
-    let mut cursor_rect_y = 250;
+    // let mut cursor_rect_x = 0;
+    // let mut cursor_rect_y = 250;
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -141,7 +141,7 @@ pub fn start_fast_type() {
                 .create_texture_from_surface(&surface)
                 .unwrap();
             text_query = input_texture.query();
-            let input_rect = Rect::new(0, 250, text_query.width, text_query.height);
+            let input_rect = Rect::new(0, 0, text_query.width, text_query.height);
             canvas.copy(&input_texture, None, input_rect).unwrap();
         }
 
