@@ -98,10 +98,10 @@ pub fn start_fast_type() {
                     input.push_str(&text);
                     input.push_str(&cursor);
                     // println!(
-                        // "check: {:?}, {:?}, {:?}",
-                        // words[current_word_index] == current_word,
-                        // words[current_word_index],
-                        // current_word
+                    // "check: {:?}, {:?}, {:?}",
+                    // words[current_word_index] == current_word,
+                    // words[current_word_index],
+                    // current_word
                     // );
                 }
                 _ => {}
