@@ -52,7 +52,8 @@ pub fn start_fast_type() {
     let mut event_pump = sdl_context.event_pump().unwrap();
     // let mut is_shift_pressed: bool = false;
 
-    let mut input = "_".to_string();
+    let cursor = "_";
+    let mut input = cursor.to_string();
     let mut input_texture;
 
     let mut cursor_rect_x = 0;
@@ -73,7 +74,7 @@ pub fn start_fast_type() {
                     if input.len() > 0 {
                         input.pop();
                         input.pop();
-                        input.push_str(&"_");
+                        input.push_str(&cursor);
                     }
                 }
                 sdl2::event::Event::KeyDown {
@@ -96,7 +97,7 @@ pub fn start_fast_type() {
                     }
                     input.pop();
                     input.push_str(&text);
-                    input.push_str(&"_");
+                    input.push_str(&cursor);
                     // println!(
                         // "check: {:?}, {:?}, {:?}",
                         // words[current_word_index] == current_word,
