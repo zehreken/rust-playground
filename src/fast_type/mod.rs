@@ -52,7 +52,7 @@ pub fn start_fast_type() {
     let mut event_pump = sdl_context.event_pump().unwrap();
     // let mut is_shift_pressed: bool = false;
 
-    let mut input = "".to_string();
+    let mut input = "_".to_string();
     let mut input_texture;
 
     let mut cursor_rect_x = 0;
@@ -72,6 +72,8 @@ pub fn start_fast_type() {
                 } => {
                     if input.len() > 0 {
                         input.pop();
+                        input.pop();
+                        input.push_str(&"_");
                     }
                 }
                 sdl2::event::Event::KeyDown {
@@ -92,13 +94,15 @@ pub fn start_fast_type() {
                     if text != " " {
                         current_word.push_str(&text);
                     }
+                    input.pop();
                     input.push_str(&text);
-                    println!(
-                        "check: {:?}, {:?}, {:?}",
-                        words[current_word_index] == current_word,
-                        words[current_word_index],
-                        current_word
-                    );
+                    input.push_str(&"_");
+                    // println!(
+                        // "check: {:?}, {:?}, {:?}",
+                        // words[current_word_index] == current_word,
+                        // words[current_word_index],
+                        // current_word
+                    // );
                 }
                 _ => {}
             }
@@ -110,17 +114,17 @@ pub fn start_fast_type() {
         //     canvas.copy(&shift_texture, None, shift_rect).unwrap();
         // }
 
-        canvas.set_draw_color(Color::RGB(0, 0, 0));
-        cursor_rect_x = input.len() % 50 * 10;
-        cursor_rect_y = 250 + input.len() / 50 * 19;
-        canvas
-            .fill_rect(Rect::new(
-                cursor_rect_x as i32,
-                cursor_rect_y as i32,
-                10,
-                16,
-            ))
-            .unwrap();
+        // canvas.set_draw_color(Color::RGB(0, 0, 0));
+        // cursor_rect_x = input.len() % 50 * 10;
+        // cursor_rect_y = 250 + input.len() / 50 * 19;
+        // canvas
+        //     .fill_rect(Rect::new(
+        //         cursor_rect_x as i32,
+        //         cursor_rect_y as i32,
+        //         10,
+        //         16,
+        //     ))
+        //     .unwrap();
         // for i in 0..20 {
         //     canvas.fill_rect(Rect::new(i * 20, 250, 10, 16)).unwrap();
         // }
