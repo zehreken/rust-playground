@@ -47,7 +47,7 @@ pub fn start_framebuffer() {
         }
     }
     framebuffer
-        .update(None, &pixels, 800 * CHANNEL_COUNT)
+        .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT)
         .unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
@@ -60,10 +60,19 @@ pub fn start_framebuffer() {
                     keycode: Some(Keycode::Escape),
                     ..
                 } => break 'running,
-                // sdl2::
                 _ => {}
             }
         }
+
+        let state = event_pump.mouse_state();
+        // println!("mouse x: {}, y: {}", state.x(), state.y());
+        let point:usize = ((state.x() + state.y() * WIDTH as i32) * CHANNEL_COUNT as i32) as usize;
+        pixels[point] = 0;
+        pixels[point + 1] = 0;
+        pixels[point + 2] = 0;
+        framebuffer
+        .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT)
+        .unwrap();
 
         canvas
             .copy(&framebuffer, None, Rect::new(0, 0, WIDTH, HEIGHT))
