@@ -1,5 +1,5 @@
 use sdl2::keyboard::Keycode;
-use sdl2::pixels::Color;
+use sdl2::pixels::{Color, PixelFormatEnum};
 use sdl2::rect::Rect;
 use sdl2::render::*;
 use std::time::Duration;
@@ -24,11 +24,33 @@ pub fn start_framebuffer() {
 
     let texture_creator = canvas.texture_creator();
     let mut framebuffer = texture_creator
-        .create_texture(None, TextureAccess::Static, WIDTH, HEIGHT)
+        .create_texture(
+            PixelFormatEnum::ARGB8888,
+            TextureAccess::Static,
+            WIDTH,
+            HEIGHT,
+        )
         .unwrap();
 
-    let pixels: [u8; WIDTH as usize * HEIGHT as usize] = [20; WIDTH as usize * HEIGHT as usize];
-    framebuffer.update(None, &pixels, 1).unwrap();
+    const CHANNEL_COUNT: usize = 4;
+    let mut pixels: [u8; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT] =
+        [255; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT];
+    let mut index = 0;
+    for i in 0..(WIDTH * HEIGHT) {
+        if i < 160000 {
+            pixels[index as usize] = 0;
+            index += 1;
+            pixels[index as usize] = 0;
+            index += 1;
+            pixels[index as usize] = 255;
+            index += 1;
+            pixels[index as usize] = 255;
+            index += 1;
+        } else {
+            // pixels[i as usize] = (i % 200) as u8;
+        }
+    }
+    framebuffer.update(None, &pixels, 800 * CHANNEL_COUNT).unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
