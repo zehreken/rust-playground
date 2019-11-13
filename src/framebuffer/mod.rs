@@ -25,32 +25,30 @@ pub fn start_framebuffer() {
     let texture_creator = canvas.texture_creator();
     let mut framebuffer = texture_creator
         .create_texture(
-            PixelFormatEnum::ARGB8888,
+            PixelFormatEnum::RGB24,
             TextureAccess::Static,
             WIDTH,
             HEIGHT,
         )
         .unwrap();
 
-    const CHANNEL_COUNT: usize = 4;
+    const CHANNEL_COUNT: usize = 3;
     let mut pixels: [u8; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT] =
         [255; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT];
-    let mut index = 0;
+    let mut offset:usize = 0;
     for i in 0..(WIDTH * HEIGHT) {
         if i < 160000 {
-            pixels[index as usize] = 0;
-            index += 1;
-            pixels[index as usize] = 0;
-            index += 1;
-            pixels[index as usize] = 255;
-            index += 1;
-            pixels[index as usize] = 255;
-            index += 1;
+            pixels[offset] = 255;
+            pixels[offset + 1] = 0;
+            pixels[offset + 2] = 0;
+            offset += 3;
         } else {
             // pixels[i as usize] = (i % 200) as u8;
         }
     }
-    framebuffer.update(None, &pixels, 800 * CHANNEL_COUNT).unwrap();
+    framebuffer
+        .update(None, &pixels, 800 * CHANNEL_COUNT)
+        .unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
@@ -62,6 +60,7 @@ pub fn start_framebuffer() {
                     keycode: Some(Keycode::Escape),
                     ..
                 } => break 'running,
+                // sdl2::
                 _ => {}
             }
         }
