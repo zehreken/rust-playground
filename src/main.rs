@@ -7,12 +7,14 @@ mod fps_utils;
 pub use crate::fps_utils::fps_utils::*;
 mod framebuffer;
 pub use crate::framebuffer::*;
-
 mod fast_type;
 pub use crate::fast_type::*;
+mod ownership;
+pub use crate::ownership::*;
 
 fn main() {
     // start_automata();
     // start_fast_type();
-    start_framebuffer();
+    // start_framebuffer();
+    start_ownership();
 }

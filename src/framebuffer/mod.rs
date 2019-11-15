@@ -24,18 +24,13 @@ pub fn start_framebuffer() {
 
     let texture_creator = canvas.texture_creator();
     let mut framebuffer = texture_creator
-        .create_texture(
-            PixelFormatEnum::RGB24,
-            TextureAccess::Static,
-            WIDTH,
-            HEIGHT,
-        )
+        .create_texture(PixelFormatEnum::RGB24, TextureAccess::Static, WIDTH, HEIGHT)
         .unwrap();
 
     const CHANNEL_COUNT: usize = 3;
     let mut pixels: [u8; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT] =
         [255; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT];
-    let mut offset:usize = 0;
+    let mut offset: usize = 0;
     for i in 0..(WIDTH * HEIGHT) {
         if i < 160000 {
             pixels[offset] = 255;
@@ -66,13 +61,13 @@ pub fn start_framebuffer() {
 
         let state = event_pump.mouse_state();
         // println!("mouse x: {}, y: {}", state.x(), state.y());
-        let point:usize = ((state.x() + state.y() * WIDTH as i32) * CHANNEL_COUNT as i32) as usize;
+        let point: usize = ((state.x() + state.y() * WIDTH as i32) * CHANNEL_COUNT as i32) as usize;
         pixels[point] = 0;
         pixels[point + 1] = 0;
         pixels[point + 2] = 0;
         framebuffer
-        .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT)
-        .unwrap();
+            .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT)
+            .unwrap();
 
         canvas
             .copy(&framebuffer, None, Rect::new(0, 0, WIDTH, HEIGHT))
