@@ -9,6 +9,11 @@ pub fn start_ownership() {
     let mut s = gives_ownership();
     s = takes_and_gives_ownership(s);
 
+    println!("{}", calculate_length(&s));
+
+    change_ref(&mut s);
+    println!("{}", s);
+
     let x = 5;
     makes_copy(x);
     makes_copy(x);
@@ -33,4 +38,12 @@ fn takes_and_gives_ownership(some_string:  String) -> String {
     println!("{}", some_string);
 
     return some_string;
+}
+
+fn calculate_length(s: &String) -> usize {
+    return s.len();
+}
+
+fn change_ref(s: &mut String) {
+    s.push_str("_new");
 }
