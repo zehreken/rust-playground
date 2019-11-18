@@ -11,10 +11,13 @@ mod fast_type;
 pub use crate::fast_type::*;
 mod ownership;
 pub use crate::ownership::*;
+mod concurrency;
+pub use crate::concurrency::*;
 
 fn main() {
     // start_automata();
     // start_fast_type();
     // start_framebuffer();
-    start_ownership();
+    // start_ownership();
+    start_concurrency();
 }
