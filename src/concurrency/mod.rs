@@ -15,13 +15,21 @@ pub fn start_concurrency() {
         thread::sleep(Duration::from_millis(1));
     }
 
-    // handle.join().unwrap(); // Calling join blocks the current thread from exiting
+    handle.join().unwrap(); // Calling join blocks the current thread from exiting
 
     let v = vec![1, 2, 3];
     let handle2 = thread::spawn(move || {
-        println!("here is a vector {:?}", v);
+        for i in 1..5 {
+            println!("here is a vector {:?}", v);
+            thread::sleep(Duration::from_millis(1));
+        }
     });
 
-    handle2.join().unwrap();
-    handle.join().unwrap();
+    for i in 1..10 {
+        println!("Another {} from main thread", i);
+        thread::sleep(Duration::from_millis(1));
+    }
+
+    // handle2.join().unwrap();
+    // handle.join().unwrap();
 }
