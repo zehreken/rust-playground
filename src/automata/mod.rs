@@ -18,9 +18,9 @@ fn get_live_neighbour_count(
     let mut neighbour_count: i32 = 0;
     for i in 0..8 {
         if cell.neighbours[i].x >= 0
-            && cell.neighbours[i].x < ROW_COUNT
+            && cell.neighbours[i].x < COLUMN_COUNT
             && cell.neighbours[i].y >= 0
-            && cell.neighbours[i].y < COLUMN_COUNT
+            && cell.neighbours[i].y < ROW_COUNT
         {
             let current_state =
                 grid[cell.neighbours[i].y as usize][cell.neighbours[i].x as usize].current_state;
