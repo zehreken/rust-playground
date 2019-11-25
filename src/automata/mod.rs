@@ -13,7 +13,7 @@ use std::time::{Duration, Instant};
 
 fn get_live_neighbour_count(
     cell: Cell,
-    grid: [[Cell; COLUMN_COUNT as usize]; ROW_COUNT as usize],
+    grid: &[[Cell; COLUMN_COUNT as usize]; ROW_COUNT as usize],
 ) -> i32 {
     let mut neighbour_count: i32 = 0;
     for i in 0..8 {
@@ -31,9 +31,7 @@ fn get_live_neighbour_count(
     return neighbour_count;
 }
 
-fn cell_tick(mut cell: Cell, grid: [[Cell; COLUMN_COUNT as usize]; ROW_COUNT as usize]) -> Cell {
-    let live_neighbour_count: i32 = get_live_neighbour_count(cell, grid);
-
+fn cell_tick(cell: &mut Cell, live_neighbour_count: i32) {
     if cell.current_state == 1 {
         if live_neighbour_count < 2 {
             cell.future_state = 0;
@@ -52,14 +50,10 @@ fn cell_tick(mut cell: Cell, grid: [[Cell; COLUMN_COUNT as usize]; ROW_COUNT as 
             cell.future_state = 0;
         }
     }
-
-    return cell;
 }
 
-fn cell_swap(mut cell: Cell) -> Cell {
+fn cell_swap(cell: &mut Cell) {
     cell.current_state = cell.future_state;
-
-    return cell;
 }
 
 pub fn start_automata() {
@@ -165,25 +159,28 @@ pub fn start_automata() {
                         20 * cell.on_count as u8
                     };
                     canvas.set_draw_color(Color::RGB(red, 0, 0));
-                    let cell_size: i32 = CELL_SIZE;
                     canvas
                         .fill_rect(Rect::new(
-                            column * cell_size,
-                            row * cell_size,
-                            cell_size as u32,
-                            cell_size as u32,
+                            column * CELL_SIZE,
+                            row * CELL_SIZE,
+                            CELL_SIZE as u32,
+                            CELL_SIZE as u32,
                         ))
                         .unwrap();
                 }
-                grid[row as usize][column as usize] =
-                    cell_tick(grid[row as usize][column as usize], grid);
+
+                let live_neighbour_count: i32 =
+                    get_live_neighbour_count(grid[row as usize][column as usize], &grid);
+                cell_tick(
+                    &mut grid[row as usize][column as usize],
+                    live_neighbour_count,
+                );
             }
         }
 
         for row in 0..ROW_COUNT {
             for column in 0..COLUMN_COUNT {
-                grid[row as usize][column as usize] =
-                    cell_swap(grid[row as usize][column as usize]);
+                cell_swap(&mut grid[row as usize][column as usize]);
             }
         }
 
@@ -191,6 +188,6 @@ pub fn start_automata() {
 
         canvas.present();
 
-        ::std::thread::sleep(Duration::from_millis(0));
+        std::thread::sleep(Duration::from_millis(0));
     }
 }
