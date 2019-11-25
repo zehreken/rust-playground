@@ -13,7 +13,7 @@ use std::time::{Duration, Instant};
 
 fn get_live_neighbour_count(
     cell: Cell,
-    grid: &[[Cell; COLUMN_COUNT as usize]; ROW_COUNT as usize],
+    grid: &Vec<Vec<Cell>>,
 ) -> i32 {
     let mut neighbour_count: i32 = 0;
     for i in 0..8 {
@@ -59,11 +59,12 @@ fn cell_swap(cell: &mut Cell) {
 pub fn start_automata() {
     let mut rng = rand::thread_rng();
 
-    let mut grid: [[Cell; COLUMN_COUNT as usize]; ROW_COUNT as usize] =
-        [[create_cell(); COLUMN_COUNT as usize]; ROW_COUNT as usize];
+    let mut grid: Vec<Vec<Cell>> = Vec::new();
 
     for row in 0..ROW_COUNT {
+        grid.push(Vec::new());
         for column in 0..COLUMN_COUNT {
+            grid[row as usize].push(create_cell());
             grid[row as usize][column as usize].position = Point { x: column, y: row };
             grid[row as usize][column as usize].neighbours = calculate_neighbours(column, row);
             grid[row as usize][column as usize].current_state =
@@ -188,6 +189,6 @@ pub fn start_automata() {
 
         canvas.present();
 
-        std::thread::sleep(Duration::from_millis(0));
+        std::thread::sleep(Duration::from_millis(20));
     }
 }
