@@ -11,10 +11,7 @@ use sdl2::surface::Surface;
 use std::path::Path;
 use std::time::{Duration, Instant};
 
-fn get_live_neighbour_count(
-    cell: Cell,
-    grid: &Vec<Vec<Cell>>,
-) -> i32 {
+fn get_live_neighbour_count(cell: Cell, grid: &Vec<Vec<Cell>>) -> i32 {
     let mut neighbour_count: i32 = 0;
     for i in 0..8 {
         if cell.neighbours[i].x >= 0

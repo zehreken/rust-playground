@@ -14,19 +14,22 @@ mod ownership;
 pub use crate::ownership::*;
 mod concurrency;
 pub use crate::concurrency::*;
+mod opengl_test;
+use crate::opengl_test::*;
 
 const AUTOMATA: &str = "--automata";
-const FAST_TYPE: &str = "--fast_type";
+const FAST_TYPE: &str = "--fasttype";
 const FRAMEBUFFER: &str = "--framebuffer";
 const OWNERSHIP: &str = "--ownership";
 const CONCURRENCY: &str = "--concurrency";
+const OPENGL_TEST: &str = "--opengltest";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
         println!(
-            "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
-            AUTOMATA, FAST_TYPE, FRAMEBUFFER, OWNERSHIP, CONCURRENCY
+            "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
+            AUTOMATA, FAST_TYPE, FRAMEBUFFER, OWNERSHIP, CONCURRENCY, OPENGL_TEST,
         );
     } else if args.len() > 2 {
         println!("Too many arguments!");
@@ -38,6 +41,7 @@ fn main() {
             FRAMEBUFFER => start_framebuffer(),
             OWNERSHIP => start_ownership(),
             CONCURRENCY => start_concurrency(),
+            OPENGL_TEST => start_opengl_test(),
             _ => println!("Unknown arguement!"),
         }
     }
