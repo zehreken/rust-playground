@@ -1,5 +1,6 @@
 use sdl2::video::GLProfile;
 use std::ffi::{CStr, CString};
+use std::fs;
 use std::time::{Duration, Instant};
 
 const SCREEN_WIDTH: u32 = 800;
@@ -20,6 +21,11 @@ const VERTICES: [f32; 9] = [
 ];
 
 pub fn start_opengl_test() {
+    let vertex_source =
+        fs::read_to_string("src/opengl_test/vertex.glsl").expect("Error reading file vertex.glsl");
+    let fragment_source = fs::read_to_string("src/opengl_test/fragment.glsl")
+        .expect("Error reading file fragment.glsl");
+
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
@@ -38,11 +44,11 @@ pub fn start_opengl_test() {
 
     // Shader creation
     // vertex shader
-    let vertex_shader_source: CString = CString::new("#version 330 core\nlayout (location = 0) in vec3 aPos;\nvoid main()\n{\ngl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n}\n")
-    .expect("CString::new failed");
+    let vertex_shader_source: CString =
+        CString::new(vertex_source.to_string()).expect("CString::new failed");
 
-    let fragment_shader_source: CString = CString::new("#version 330 core\nout vec4 FragColor;\nvoid main()\n{\nFragColor = vec4(0.0f, 0.0f, 0.2f, 1.0f);\n}\n")
-    .expect("CString::new failed");
+    let fragment_shader_source: CString =
+        CString::new(fragment_source.to_string()).expect("CString::new failed");
 
     let mut vertex_shader: u32 = 0;
     let mut fragment_shader: u32 = 0;
