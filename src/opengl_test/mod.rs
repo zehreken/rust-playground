@@ -2,6 +2,7 @@ use sdl2::video::GLProfile;
 use std::ffi::{CStr, CString};
 use std::fs;
 use std::time::{Duration, Instant};
+use gl::types::*;
 
 const SCREEN_WIDTH: u32 = 800;
 const SCREEN_HEIGHT: u32 = 600;
@@ -14,11 +15,14 @@ const SCREEN_HEIGHT: u32 = 600;
 // ];
 
 // Triangle
-const VERTICES: [f32; 9] = [
-    -0.5, -0.5, 0.0, // left
-    0.5, -0.5, 0.0, // right
-    0.0, 0.5, 0.0, // top
+const VERTICES: [GLfloat; 12] = [
+    0.5, 0.5, 0.0, // top right
+    0.5, -0.5, 0.0, // bottom right
+    -0.5, -0.5, 0.0, // bottom left
+    -0.5, 0.5, 0.0, // top left
 ];
+
+const INDICES: [GLuint; 6] = [0, 1, 3, 1, 2, 3];
 
 pub fn start_opengl_test() {
     let vertex_source =
@@ -39,7 +43,7 @@ pub fn start_opengl_test() {
         .build()
         .unwrap();
 
-    let context = window.gl_create_context().unwrap();
+    let gl_context = window.gl_create_context().unwrap();
     gl::load_with(|name| video_subsystem.gl_get_proc_address(name) as *const _);
 
     // Shader creation
@@ -50,10 +54,11 @@ pub fn start_opengl_test() {
     let fragment_shader_source: CString =
         CString::new(fragment_source.to_string()).expect("CString::new failed");
 
-    let mut vertex_shader: u32 = 0;
-    let mut fragment_shader: u32 = 0;
-    let mut shader_program: u32 = 0;
+    let mut shader_program: GLuint = 0;
     unsafe {
+        let mut vertex_shader: GLuint = 0;
+        let mut fragment_shader: GLuint = 0;
+
         vertex_shader = shader_from_source(&vertex_shader_source, gl::VERTEX_SHADER).unwrap();
         fragment_shader = shader_from_source(&fragment_shader_source, gl::FRAGMENT_SHADER).unwrap();
         shader_program = gl::CreateProgram();
@@ -71,18 +76,28 @@ pub fn start_opengl_test() {
     }
     // ===============
 
-    let mut vao: u32 = 0;
-    let mut vbo: u32 = 0;
+    let mut vao: GLuint = 0;
+    let mut vbo: GLuint = 0;
+    let mut ebo: GLuint = 0;
     unsafe {
-        gl::GenBuffers(1, &mut vbo);
         gl::GenVertexArrays(1, &mut vao);
         gl::BindVertexArray(vao);
 
+        gl::GenBuffers(1, &mut vbo);
         gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
         gl::BufferData(
             gl::ARRAY_BUFFER,
-            (VERTICES.len() * std::mem::size_of::<f32>()) as gl::types::GLsizeiptr,
-            VERTICES.as_ptr() as *const gl::types::GLvoid,
+            (VERTICES.len() * std::mem::size_of::<GLfloat>()) as gl::types::GLsizeiptr,
+            std::mem::transmute(&VERTICES[0]),
+            gl::STATIC_DRAW,
+        );
+
+        gl::GenBuffers(1, &mut ebo);
+        gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, ebo);
+        gl::BufferData(
+            gl::ELEMENT_ARRAY_BUFFER,
+            (INDICES.len() * std::mem::size_of::<GLuint>()) as gl::types::GLsizeiptr,
+            std::mem::transmute(&INDICES[0]),
             gl::STATIC_DRAW,
         );
 
@@ -91,10 +106,11 @@ pub fn start_opengl_test() {
             3,
             gl::FLOAT,
             gl::FALSE,
-            (3 * std::mem::size_of::<f32>()) as gl::types::GLint,
+            (3 * std::mem::size_of::<GLfloat>()) as gl::types::GLint,
             std::ptr::null(),
         );
         gl::EnableVertexAttribArray(0);
+
         gl::BindBuffer(gl::ARRAY_BUFFER, 0);
         gl::BindVertexArray(0);
     }
@@ -108,7 +124,14 @@ pub fn start_opengl_test() {
 
             gl::UseProgram(shader_program);
             gl::BindVertexArray(vao);
-            gl::DrawArrays(gl::TRIANGLES, 0, 3);
+            // gl::DrawArrays(gl::TRIANGLES, 0, 3);
+            gl::DrawElements(
+                gl::TRIANGLES,
+                6,
+                gl::UNSIGNED_INT,
+                std::ptr::null(),
+            );
+            gl::BindVertexArray(0);
         }
 
         window.gl_swap_window();
