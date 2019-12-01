@@ -1,4 +1,5 @@
 use cgmath::*;
+use core::ops::Mul;
 use gl::types::*;
 use sdl2::video::GLProfile;
 use std::ffi::{CStr, CString};
@@ -126,14 +127,18 @@ pub fn start_opengl_test() {
     let proj_name = CString::new("projection").unwrap();
     let proj_ptr = proj_name.as_ptr() as *const GLchar;
 
+    let now = Instant::now();
+
     'game: loop {
-        let model: Matrix4<f32> = One::one();
+        let mut model: Matrix4<f32> = One::one();
+        let rotation =
+            Matrix4::from_angle_y(Rad::from(Deg(now.elapsed().as_millis() as f32 / 10.0)));
+        model = model.mul(rotation);
         let model_: [[f32; 4]; 4] = model.into();
-        let translation = Matrix4::from_translation(Vector3::new(0.0, 0.0, -10.0));
+        let translation = Matrix4::from_translation(Vector3::new(0.0, 0.0, -3.0));
         let mut view: Matrix4<f32> = One::one();
-        view += translation;
+        view = view.mul(translation);
         let view_: [[f32; 4]; 4] = view.into();
-        let projection: Matrix4<f32> = One::one();
         let projection: [[f32; 4]; 4] =
             perspective(Rad::from(Deg(45.0)), aspect_ratio, 0.1, 100.0).into();
         unsafe {
@@ -141,10 +146,6 @@ pub fn start_opengl_test() {
             gl::Clear(gl::COLOR_BUFFER_BIT);
 
             gl::UseProgram(shader_program);
-            // model = glm::rotate(model, glm::radians((float)SDL_GetTicks() / 4.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-            // glm::mat4 view = glm::mat4(1.0f);
-            // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
             let model_mat_ptr: *const f32 = std::mem::transmute(&model_);
             let model_loc = gl::GetUniformLocation(shader_program, model_ptr);
