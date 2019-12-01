@@ -1,8 +1,9 @@
+use cgmath::*;
+use gl::types::*;
 use sdl2::video::GLProfile;
 use std::ffi::{CStr, CString};
 use std::fs;
 use std::time::{Duration, Instant};
-use gl::types::*;
 
 const SCREEN_WIDTH: u32 = 800;
 const SCREEN_HEIGHT: u32 = 600;
@@ -116,21 +117,50 @@ pub fn start_opengl_test() {
     }
 
     let mut event_pump = sdl_context.event_pump().unwrap();
+    let aspect_ratio = SCREEN_WIDTH as f32 / SCREEN_HEIGHT as f32;
+
+    let model_name = CString::new("model").unwrap();
+    let model_ptr = model_name.as_ptr() as *const GLchar;
+    let view_name = CString::new("view").unwrap();
+    let view_ptr = view_name.as_ptr() as *const GLchar;
+    let proj_name = CString::new("projection").unwrap();
+    let proj_ptr = proj_name.as_ptr() as *const GLchar;
 
     'game: loop {
+        let model: Matrix4<f32> = One::one();
+        let model_: [[f32; 4]; 4] = model.into();
+        let translation = Matrix4::from_translation(Vector3::new(0.0, 0.0, -10.0));
+        let mut view: Matrix4<f32> = One::one();
+        view += translation;
+        let view_: [[f32; 4]; 4] = view.into();
+        let projection: Matrix4<f32> = One::one();
+        let projection: [[f32; 4]; 4] =
+            perspective(Rad::from(Deg(45.0)), aspect_ratio, 0.1, 100.0).into();
         unsafe {
             gl::ClearColor(1.0, 0.0, 0.21, 1.0);
             gl::Clear(gl::COLOR_BUFFER_BIT);
 
             gl::UseProgram(shader_program);
+            // model = glm::rotate(model, glm::radians((float)SDL_GetTicks() / 4.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+            // glm::mat4 view = glm::mat4(1.0f);
+            // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+            let model_mat_ptr: *const f32 = std::mem::transmute(&model_);
+            let model_loc = gl::GetUniformLocation(shader_program, model_ptr);
+            gl::UniformMatrix4fv(model_loc, 1, gl::FALSE, model_mat_ptr);
+
+            let view_mat_ptr: *const f32 = std::mem::transmute(&view_);
+            let view_loc = gl::GetUniformLocation(shader_program, view_ptr);
+            gl::UniformMatrix4fv(view_loc, 1, gl::FALSE, view_mat_ptr);
+
+            let proj_mat_ptr: *const f32 = std::mem::transmute(&projection);
+            let proj_loc = gl::GetUniformLocation(shader_program, proj_ptr);
+            gl::UniformMatrix4fv(proj_loc, 1, gl::FALSE, proj_mat_ptr);
+
             gl::BindVertexArray(vao);
             // gl::DrawArrays(gl::TRIANGLES, 0, 3);
-            gl::DrawElements(
-                gl::TRIANGLES,
-                6,
-                gl::UNSIGNED_INT,
-                std::ptr::null(),
-            );
+            gl::DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
             gl::BindVertexArray(0);
         }
 
