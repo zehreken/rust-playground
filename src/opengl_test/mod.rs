@@ -18,10 +18,10 @@ const SCREEN_HEIGHT: u32 = 600;
 
 // Triangle
 const VERTICES: [GLfloat; 12] = [
-    0.5, 0.5, 0.0, // top right
-    0.5, -0.5, 0.0, // bottom right
-    -0.5, -0.5, 0.0, // bottom left
-    -0.5, 0.5, 0.0, // top left
+    1.0, 1.0, 0.0, // top right
+    1.0, -1.0, 0.0, // bottom right
+    -1.0, -1.0, 0.0, // bottom left
+    -1.0, 1.0, 0.0, // top left
 ];
 
 const INDICES: [GLuint; 6] = [0, 1, 3, 1, 2, 3];
@@ -120,29 +120,32 @@ pub fn start_opengl_test() {
     let mut event_pump = sdl_context.event_pump().unwrap();
     let aspect_ratio = SCREEN_WIDTH as f32 / SCREEN_HEIGHT as f32;
 
+    let scale_name = CString::new("scale").unwrap();
+    let scale_ptr = scale_name.as_ptr() as *const GLchar;
     let model_name = CString::new("model").unwrap();
     let model_ptr = model_name.as_ptr() as *const GLchar;
     let view_name = CString::new("view").unwrap();
     let view_ptr = view_name.as_ptr() as *const GLchar;
     let proj_name = CString::new("projection").unwrap();
     let proj_ptr = proj_name.as_ptr() as *const GLchar;
+    let mut scale:GLfloat = 2.0;
 
     let now = Instant::now();
 
     'game: loop {
         let mut model: Matrix4<f32> = One::one();
-        let rotation =
-            Matrix4::from_angle_y(Rad::from(Deg(now.elapsed().as_millis() as f32 / 10.0)));
-        model = model.mul(rotation);
+        // let rotation =
+        //     Matrix4::from_angle_y(Rad::from(Deg(now.elapsed().as_millis() as f32 / 100.0)));
+        // model = model.mul(rotation);
         let model_: [[f32; 4]; 4] = model.into();
-        let translation = Matrix4::from_translation(Vector3::new(0.0, 0.0, -3.0));
+        let translation = Matrix4::from_translation(Vector3::new(0.0, 0.0, -1.0));
         let mut view: Matrix4<f32> = One::one();
         view = view.mul(translation);
         let view_: [[f32; 4]; 4] = view.into();
         let projection: [[f32; 4]; 4] =
             perspective(Rad::from(Deg(45.0)), aspect_ratio, 0.1, 100.0).into();
         unsafe {
-            gl::ClearColor(1.0, 0.0, 0.21, 1.0);
+            gl::ClearColor(1.0, 1.0, 0.21, 1.0);
             gl::Clear(gl::COLOR_BUFFER_BIT);
 
             gl::UseProgram(shader_program);
@@ -158,6 +161,9 @@ pub fn start_opengl_test() {
             let proj_mat_ptr: *const f32 = std::mem::transmute(&projection);
             let proj_loc = gl::GetUniformLocation(shader_program, proj_ptr);
             gl::UniformMatrix4fv(proj_loc, 1, gl::FALSE, proj_mat_ptr);
+
+            let scale_loc = gl::GetUniformLocation(shader_program, scale_ptr);
+            gl::Uniform1f(scale_loc, scale);
 
             gl::BindVertexArray(vao);
             // gl::DrawArrays(gl::TRIANGLES, 0, 3);
