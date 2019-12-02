@@ -29,7 +29,7 @@ const INDICES: [GLuint; 6] = [0, 1, 3, 1, 2, 3];
 pub fn start_opengl_test() {
     let vertex_source =
         fs::read_to_string("src/opengl_test/vertex.glsl").expect("Error reading file vertex.glsl");
-    let fragment_source = fs::read_to_string("src/opengl_test/fragment.glsl")
+    let fragment_source = fs::read_to_string("src/opengl_test/juliaset.glsl")
         .expect("Error reading file fragment.glsl");
 
     let sdl_context = sdl2::init().unwrap();
@@ -130,13 +130,14 @@ pub fn start_opengl_test() {
     let view_ptr = view_name.as_ptr() as *const GLchar;
     let proj_name = CString::new("projection").unwrap();
     let proj_ptr = proj_name.as_ptr() as *const GLchar;
-    let scale:GLfloat = 1.0;
-    let mut iteration:GLint = 1;
+    let mut scale:GLfloat = 1.0;
+    let mut iteration:GLint = 100;
 
     let now = Instant::now();
 
     'game: loop {
         iteration = now.elapsed().as_millis() as GLint / 100;
+        scale = now.elapsed().as_millis() as GLfloat / 100.0;
         let mut model: Matrix4<f32> = One::one();
         // let rotation =
         //     Matrix4::from_angle_y(Rad::from(Deg(now.elapsed().as_millis() as f32 / 100.0)));
