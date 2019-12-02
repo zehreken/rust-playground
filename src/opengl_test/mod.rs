@@ -122,17 +122,21 @@ pub fn start_opengl_test() {
 
     let scale_name = CString::new("scale").unwrap();
     let scale_ptr = scale_name.as_ptr() as *const GLchar;
+    let iteration_name = CString::new("iteration").unwrap();
+    let iteration_ptr = iteration_name.as_ptr() as *const GLchar;
     let model_name = CString::new("model").unwrap();
     let model_ptr = model_name.as_ptr() as *const GLchar;
     let view_name = CString::new("view").unwrap();
     let view_ptr = view_name.as_ptr() as *const GLchar;
     let proj_name = CString::new("projection").unwrap();
     let proj_ptr = proj_name.as_ptr() as *const GLchar;
-    let mut scale:GLfloat = 2.0;
+    let scale:GLfloat = 1.0;
+    let mut iteration:GLint = 1;
 
     let now = Instant::now();
 
     'game: loop {
+        iteration = now.elapsed().as_millis() as GLint / 100;
         let mut model: Matrix4<f32> = One::one();
         // let rotation =
         //     Matrix4::from_angle_y(Rad::from(Deg(now.elapsed().as_millis() as f32 / 100.0)));
@@ -164,6 +168,9 @@ pub fn start_opengl_test() {
 
             let scale_loc = gl::GetUniformLocation(shader_program, scale_ptr);
             gl::Uniform1f(scale_loc, scale);
+
+            let iteration_loc = gl::GetUniformLocation(shader_program, iteration_ptr);
+            gl::Uniform1i(iteration_loc, iteration);
 
             gl::BindVertexArray(vao);
             // gl::DrawArrays(gl::TRIANGLES, 0, 3);
