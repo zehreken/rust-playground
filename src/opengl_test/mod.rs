@@ -9,14 +9,6 @@ use std::time::{Duration, Instant};
 const SCREEN_WIDTH: u32 = 800;
 const SCREEN_HEIGHT: u32 = 600;
 
-// const vertices: [f32; 32] = [
-//     0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 0.6, 0.4, // top right
-//     0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.6, 0.6, // bottom right
-//     -0.5, -0.5, 0.0, 0.0, 0.0, 1.0, 0.4, 0.6, // bottom left
-//     -0.5, 0.5, 0.0, 1.0, 1.0, 1.0, 0.4, 0.4, // top left
-// ];
-
-// Triangle
 const VERTICES: [GLfloat; 12] = [
     1.0, 1.0, 0.0, // top right
     1.0, -1.0, 0.0, // bottom right
@@ -49,7 +41,6 @@ pub fn start_opengl_test() {
     gl::load_with(|name| video_subsystem.gl_get_proc_address(name) as *const _);
 
     // Shader creation
-    // vertex shader
     let vertex_shader_source: CString =
         CString::new(vertex_source.to_string()).expect("CString::new failed");
 
@@ -130,14 +121,14 @@ pub fn start_opengl_test() {
     let view_ptr = view_name.as_ptr() as *const GLchar;
     let proj_name = CString::new("projection").unwrap();
     let proj_ptr = proj_name.as_ptr() as *const GLchar;
-    let mut scale:GLfloat = 1.0;
-    let mut iteration:GLint = 100;
+    let mut scale: GLfloat = 1.0;
+    let mut iteration: GLint = 100;
 
     let now = Instant::now();
 
     'game: loop {
         iteration = now.elapsed().as_millis() as GLint / 100;
-        scale = now.elapsed().as_millis() as GLfloat / 100.0;
+        scale = now.elapsed().as_millis() as GLfloat / 10.0;
         let mut model: Matrix4<f32> = One::one();
         // let rotation =
         //     Matrix4::from_angle_y(Rad::from(Deg(now.elapsed().as_millis() as f32 / 100.0)));

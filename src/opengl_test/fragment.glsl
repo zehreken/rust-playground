@@ -27,5 +27,4 @@ void main()
     
     float value = (i == iterations ? 0.0 : float(i)) / float(iterations);
     FragColor = vec4(value, value * value, 1.0 - value, 1.0);
-    // FragColor = vec4(0.4f, 0.0f, 0.2f, 1.0f);
 }
