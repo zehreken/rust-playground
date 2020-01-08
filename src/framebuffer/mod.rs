@@ -4,10 +4,11 @@ use sdl2::rect::Rect;
 use sdl2::render::*;
 use std::time::Duration;
 
-pub fn start_framebuffer() {
-    const WIDTH: u32 = 800;
-    const HEIGHT: u32 = 400;
+const WIDTH: u32 = 800;
+const HEIGHT: u32 = 400;
+const CHANNEL_COUNT: u32 = 3;
 
+pub fn start_framebuffer() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
@@ -27,22 +28,21 @@ pub fn start_framebuffer() {
         .create_texture(PixelFormatEnum::RGB24, TextureAccess::Static, WIDTH, HEIGHT)
         .unwrap();
 
-    const CHANNEL_COUNT: usize = 3;
-    let mut pixels: [u8; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT] =
-        [255; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT];
-    let mut offset: usize = 0;
-    for i in 0..(WIDTH * HEIGHT) {
-        if i < 160000 {
-            pixels[offset] = 255;
-            pixels[offset + 1] = 0;
-            pixels[offset + 2] = 0;
-            offset += 3;
-        } else {
-            // pixels[i as usize] = (i % 200) as u8;
+    let mut pixels: [u8; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT as usize] =
+        [255; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT as usize];
+
+    for x in 0..100 {
+        for y in 0..100 {
+            let x_: i32 = x - 50;
+            let y_: i32 = y - 50;
+            if x_ * x_ + y_ * y_ <= 2500 {
+                color_pixel(&mut pixels, x as usize, y as usize, Color::RGB(0, 0, 0));
+            }
         }
     }
+
     framebuffer
-        .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT)
+        .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT as usize)
         .unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
@@ -61,12 +61,15 @@ pub fn start_framebuffer() {
 
         let state = event_pump.mouse_state();
         // println!("mouse x: {}, y: {}", state.x(), state.y());
-        let point: usize = ((state.x() + state.y() * WIDTH as i32) * CHANNEL_COUNT as i32) as usize;
-        pixels[point] = 0;
-        pixels[point + 1] = 0;
-        pixels[point + 2] = 0;
+        color_pixel(
+            &mut pixels,
+            state.x() as usize,
+            state.y() as usize,
+            Color::RGB(0, 0, 0),
+        );
+
         framebuffer
-            .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT)
+            .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT as usize)
             .unwrap();
 
         canvas
@@ -78,4 +81,16 @@ pub fn start_framebuffer() {
 
         std::thread::sleep(Duration::from_millis(20));
     }
+}
+
+fn color_pixel(
+    pixels: &mut [u8; WIDTH as usize * HEIGHT as usize * CHANNEL_COUNT as usize],
+    x: usize,
+    y: usize,
+    color: Color,
+) {
+    let index: usize = (x + y * WIDTH as usize) * CHANNEL_COUNT as usize;
+    pixels[index] = color.r;
+    pixels[index + 1] = color.g;
+    pixels[index + 2] = color.b;
 }
