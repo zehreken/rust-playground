@@ -45,8 +45,10 @@ pub fn start_framebuffer() {
         .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT as usize)
         .unwrap();
 
-    let mut event_pump = sdl_context.event_pump().unwrap();
+    let mut center: (i32, i32) = (0, 0);
+    let radius: i32 = 50;
 
+    let mut event_pump = sdl_context.event_pump().unwrap();
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -59,14 +61,33 @@ pub fn start_framebuffer() {
             }
         }
 
-        let state = event_pump.mouse_state();
-        // println!("mouse x: {}, y: {}", state.x(), state.y());
-        color_pixel(
-            &mut pixels,
-            state.x() as usize,
-            state.y() as usize,
-            Color::RGB(0, 0, 0),
-        );
+        // let state = event_pump.mouse_state();
+        // color_pixel(
+        //     &mut pixels,
+        //     state.x() as usize,
+        //     state.y() as usize,
+        //     Color::RGB(0, 0, 0),
+        // );
+
+        center.0 += 1;
+        center.1 = 200;
+        for x in 0..WIDTH {
+            for y in 0..HEIGHT {
+                let x_: i32 = center.0 - x as i32;
+                let y_: i32 = center.1 - y as i32;
+                let a = x_ * x_ + y_ * y_;
+                if a <= radius * radius && a > 1000 {
+                    color_pixel(&mut pixels, x as usize, y as usize, Color::RGB(0, 0, 0));
+                } else {
+                    color_pixel(
+                        &mut pixels,
+                        x as usize,
+                        y as usize,
+                        Color::RGB(255, 255, 255),
+                    );
+                }
+            }
+        }
 
         framebuffer
             .update(None, &pixels, WIDTH as usize * CHANNEL_COUNT as usize)
