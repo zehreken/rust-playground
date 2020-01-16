@@ -9,7 +9,7 @@ pub fn start_memory() {
 
     let reference = &4;
     match reference {
-        &val => println!("Got a value via destructuring: {:?}", val)
+        &val => println!("Got a value via destructuring: {:?}", val),
     }
     print_int_ref(reference);
 
