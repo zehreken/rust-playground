@@ -16,6 +16,8 @@ mod concurrency;
 pub use crate::concurrency::*;
 mod opengl_test;
 use crate::opengl_test::*;
+mod memory;
+use crate::memory::*;
 
 const AUTOMATA: &str = "--automata";
 const FAST_TYPE: &str = "--fasttype";
@@ -23,6 +25,7 @@ const FRAMEBUFFER: &str = "--framebuffer";
 const OWNERSHIP: &str = "--ownership";
 const CONCURRENCY: &str = "--concurrency";
 const OPENGL_TEST: &str = "--opengltest";
+const MEMORY: &str = "--memory";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -42,6 +45,7 @@ fn main() {
             OWNERSHIP => start_ownership(),
             CONCURRENCY => start_concurrency(),
             OPENGL_TEST => start_opengl_test(),
+            MEMORY => start_memory(),
             _ => println!("Unknown arguement!"),
         }
     }
