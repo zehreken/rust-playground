@@ -18,6 +18,8 @@ mod opengl_test;
 use crate::opengl_test::*;
 mod memory;
 use crate::memory::*;
+mod cpal;
+use crate::cpal::*;
 
 const AUTOMATA: &str = "--automata";
 const FAST_TYPE: &str = "--fasttype";
@@ -26,6 +28,7 @@ const OWNERSHIP: &str = "--ownership";
 const CONCURRENCY: &str = "--concurrency";
 const OPENGL_TEST: &str = "--opengltest";
 const MEMORY: &str = "--memory";
+const CPAL: &str = "--cpal";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -46,6 +49,7 @@ fn main() {
             CONCURRENCY => start_concurrency(),
             OPENGL_TEST => start_opengl_test(),
             MEMORY => start_memory(),
+            CPAL => start_cpal(),
             _ => println!("Unknown arguement!"),
         }
     }

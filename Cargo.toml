@@ -10,6 +10,7 @@ edition = "2018"
 ferris-says = "0.1"
 rand = "0.7.0"
 cgmath = "0.17.0"
+cpal = "0.11.0"
 
 [dependencies.sdl2]
 version = "0.32.2"
