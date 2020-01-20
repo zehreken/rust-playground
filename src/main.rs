@@ -18,8 +18,8 @@ mod opengl_test;
 use crate::opengl_test::*;
 mod memory;
 use crate::memory::*;
-mod cpal;
-use crate::cpal::*;
+mod cpal_test;
+use crate::cpal_test::*;
 
 const AUTOMATA: &str = "--automata";
 const FAST_TYPE: &str = "--fasttype";
@@ -28,14 +28,21 @@ const OWNERSHIP: &str = "--ownership";
 const CONCURRENCY: &str = "--concurrency";
 const OPENGL_TEST: &str = "--opengltest";
 const MEMORY: &str = "--memory";
-const CPAL: &str = "--cpal";
+const CPAL_TEST: &str = "--cpaltest";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
         println!(
-            "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
-            AUTOMATA, FAST_TYPE, FRAMEBUFFER, OWNERSHIP, CONCURRENCY, OPENGL_TEST,
+            "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
+            AUTOMATA,
+            FAST_TYPE,
+            FRAMEBUFFER,
+            OWNERSHIP,
+            CONCURRENCY,
+            OPENGL_TEST,
+            MEMORY,
+            CPAL_TEST
         );
     } else if args.len() > 2 {
         println!("Too many arguments!");
@@ -49,7 +56,7 @@ fn main() {
             CONCURRENCY => start_concurrency(),
             OPENGL_TEST => start_opengl_test(),
             MEMORY => start_memory(),
-            CPAL => start_cpal(),
+            CPAL_TEST => start_cpal(),
             _ => println!("Unknown arguement!"),
         }
     }
