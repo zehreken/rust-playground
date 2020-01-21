@@ -20,6 +20,8 @@ mod memory;
 use crate::memory::*;
 mod cpal_test;
 use crate::cpal_test::*;
+mod rust_book;
+use crate::rust_book::*;
 
 const AUTOMATA: &str = "--automata";
 const FAST_TYPE: &str = "--fasttype";
@@ -29,12 +31,13 @@ const CONCURRENCY: &str = "--concurrency";
 const OPENGL_TEST: &str = "--opengltest";
 const MEMORY: &str = "--memory";
 const CPAL_TEST: &str = "--cpaltest";
+const RUST_BOOK: &str = "--rustbook";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
         println!(
-            "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
+            "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
             AUTOMATA,
             FAST_TYPE,
             FRAMEBUFFER,
@@ -42,7 +45,8 @@ fn main() {
             CONCURRENCY,
             OPENGL_TEST,
             MEMORY,
-            CPAL_TEST
+            CPAL_TEST,
+            RUST_BOOK,
         );
     } else if args.len() > 2 {
         println!("Too many arguments!");
@@ -57,6 +61,7 @@ fn main() {
             OPENGL_TEST => start_opengl_test(),
             MEMORY => start_memory(),
             CPAL_TEST => start_cpal(),
+            RUST_BOOK => start_rust_book(),
             _ => println!("Unknown arguement!"),
         }
     }
