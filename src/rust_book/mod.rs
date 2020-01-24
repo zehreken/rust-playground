@@ -30,6 +30,16 @@ fn chapter_4() {
     let s4 = s3.clone();
     println!("{}, {}", s3, s4);
 
+    println!("lenght: {}, {}", calculate_length(&s3), s3);
+
+    // Mutable references
+    let mut s = String::from("hello");
+    let r0 = &s;
+    let r1 = &s;
+    println!("{}, {}", r0, r1); // Since r0, r1 are used here, no problem borrowing s as mutable in the next line
+    let r2 = &mut s;
+    println!("{}", r2);
+
     let s = String::from("hello"); // s comes into scope
 
     takes_ownership(s); // s's value moves into the function...
@@ -42,6 +52,10 @@ fn chapter_4() {
                    // use x afterward
 } // Here, x goes out of scope, then s. But because s's value was moved, nothing
   // special happens.
+
+fn calculate_length(s: &String) -> usize {
+    s.len()
+}
 
 fn takes_ownership(some_string: String) {
     // some_string comes into scope
