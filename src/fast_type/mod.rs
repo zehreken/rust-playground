@@ -28,15 +28,22 @@ pub fn start_fast_type() {
     canvas.clear();
     canvas.present();
 
-    let mut sample_text = "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.";
+    let sample_text = "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.";
+    let mut chars: Vec<char> = Vec::new();
+    let mut input_chars: Vec<char> = Vec::new();
+    let mut match_chars: Vec<bool> = Vec::new();
+    for b in sample_text.chars() {
+        chars.push(b);
+    }
     let words: Vec<&str> = sample_text.split(' ').collect();
     let word_count = words.len();
+    let mut char_index: i32 = -1;
     let mut current_word_index = 0;
     let mut current_word = "".to_string();
 
-    for word in &words {
-        println!("{}", word);
-    }
+    // for word in &words {
+    //     println!("{}", word);
+    // }
     let mut surface: Surface = font
         .render(sample_text)
         .blended_wrapped(Color::RGB(150, 150, 150), WIDTH)
@@ -70,8 +77,13 @@ pub fn start_fast_type() {
                     if input.len() > 0 {
                         input.pop();
                         input.pop();
-                        current_word.pop();
                         input.push_str(&cursor);
+                        current_word.pop();
+                        input_chars.pop();
+                        match_chars.pop();
+                        if char_index >= 0 {
+                            char_index -= 1;
+                        }
                     }
                 }
                 sdl2::event::Event::KeyDown {
@@ -82,8 +94,9 @@ pub fn start_fast_type() {
                         println!("{} -> Next word!", current_word);
                         current_word = "".to_string();
                         current_word_index += 1;
-                        if (current_word_index == word_count)
-                        {
+                        // char_index += 1;
+                        // input_chars.push(' ');
+                        if (current_word_index == word_count) {
                             println!("{}", "Sentence complete");
                         }
                     }
@@ -99,6 +112,17 @@ pub fn start_fast_type() {
                     input.pop();
                     input.push_str(&text);
                     input.push_str(&cursor);
+                    char_index += 1;
+                    input_chars.push(if let Some(c) = text.chars().next() {
+                        c
+                    } else {
+                        ' '
+                    });
+                    if chars[char_index as usize] == input_chars[char_index as usize] {
+                        match_chars.push(true);
+                    } else {
+                        match_chars.push(false);
+                    }
                     // println!(
                     // "check: {:?}, {:?}, {:?}",
                     // words[current_word_index] == current_word,
@@ -113,6 +137,15 @@ pub fn start_fast_type() {
         canvas.copy(&texture, None, text_rect).unwrap();
 
         canvas.set_draw_color(Color::RGB(255, 255, 255));
+
+        if char_index >= 0 {
+            println!(
+                "{}, {}, {:?}",
+                chars.len(),
+                input_chars.len(),
+                match_chars
+            );
+        }
 
         if input.len() > 0 {
             surface = font
