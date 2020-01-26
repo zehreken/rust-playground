@@ -3,6 +3,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::surface::Surface;
 use std::path::Path;
+use std::string::String;
 use std::time::Duration;
 
 pub fn start_fast_type() {
@@ -27,7 +28,7 @@ pub fn start_fast_type() {
     canvas.clear();
     canvas.present();
 
-    let sample_text = "There are two motives for reading a book; one, that you enjoy it; the other, that you can boast about it.";
+    let mut sample_text = "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.";
     let words: Vec<&str> = sample_text.split(' ').collect();
     let word_count = words.len();
     let mut current_word_index = 0;
@@ -49,14 +50,10 @@ pub fn start_fast_type() {
     let text_rect = Rect::new(0, 0, text_query.width, text_query.height);
 
     let mut event_pump = sdl_context.event_pump().unwrap();
-    // let mut is_shift_pressed: bool = false;
 
-    let cursor = "_";
+    let cursor = "_"; // String literal is slice
     let mut input = cursor.to_string();
     let mut input_texture;
-
-    // let mut cursor_rect_x = 0;
-    // let mut cursor_rect_y = 250;
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -73,6 +70,7 @@ pub fn start_fast_type() {
                     if input.len() > 0 {
                         input.pop();
                         input.pop();
+                        current_word.pop();
                         input.push_str(&cursor);
                     }
                 }
@@ -81,9 +79,13 @@ pub fn start_fast_type() {
                     ..
                 } => {
                     if current_word.len() > 0 {
-                        println!("Next word!");
+                        println!("{} -> Next word!", current_word);
                         current_word = "".to_string();
                         current_word_index += 1;
+                        if (current_word_index == word_count)
+                        {
+                            println!("{}", "Sentence complete");
+                        }
                     }
                 }
                 sdl2::event::Event::TextInput {
@@ -109,25 +111,6 @@ pub fn start_fast_type() {
         }
 
         canvas.copy(&texture, None, text_rect).unwrap();
-
-        // if is_shift_pressed {
-        //     canvas.copy(&shift_texture, None, shift_rect).unwrap();
-        // }
-
-        // canvas.set_draw_color(Color::RGB(0, 0, 0));
-        // cursor_rect_x = input.len() % 50 * 10;
-        // cursor_rect_y = 250 + input.len() / 50 * 19;
-        // canvas
-        //     .fill_rect(Rect::new(
-        //         cursor_rect_x as i32,
-        //         cursor_rect_y as i32,
-        //         10,
-        //         16,
-        //     ))
-        //     .unwrap();
-        // for i in 0..20 {
-        //     canvas.fill_rect(Rect::new(i * 20, 250, 10, 16)).unwrap();
-        // }
 
         canvas.set_draw_color(Color::RGB(255, 255, 255));
 
