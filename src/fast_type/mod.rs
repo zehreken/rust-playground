@@ -3,8 +3,10 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::surface::Surface;
 use std::path::Path;
-use std::string::String;
 use std::time::Duration;
+
+const CELL_WIDTH: i32 = 10;
+const CELL_HEIGHT: i32 = 19;
 
 pub fn start_fast_type() {
     const WIDTH: u32 = 500;
@@ -35,6 +37,7 @@ pub fn start_fast_type() {
     for b in sample_text.chars() {
         chars.push(b);
     }
+    println!("chars: {}", chars.len());
     let words: Vec<&str> = sample_text.split(' ').collect();
     let word_count = words.len();
     let mut char_index: i32 = -1;
@@ -50,7 +53,7 @@ pub fn start_fast_type() {
         // .solid(Color::RGB(255, 255, 255))
         .unwrap();
     let texture_creator = canvas.texture_creator();
-    let mut texture = texture_creator
+    let texture = texture_creator
         .create_texture_from_surface(&surface)
         .unwrap();
     let mut text_query = texture.query();
@@ -94,9 +97,7 @@ pub fn start_fast_type() {
                         println!("{} -> Next word!", current_word);
                         current_word = "".to_string();
                         current_word_index += 1;
-                        // char_index += 1;
-                        // input_chars.push(' ');
-                        if (current_word_index == word_count) {
+                        if current_word_index == word_count {
                             println!("{}", "Sentence complete");
                         }
                     }
@@ -134,19 +135,32 @@ pub fn start_fast_type() {
             }
         }
 
+        if input.len() > 0 {
+            for i in 0..match_chars.len() {
+                if match_chars[i] {
+                    canvas.set_draw_color(Color::RGB(0, 255, 0));
+                } else {
+                    canvas.set_draw_color(Color::RGB(255, 0, 0));
+                }
+                canvas
+                    .fill_rect(Rect::new(
+                        (i % 50) as i32 * CELL_WIDTH,
+                        (i / 50) as i32 * CELL_HEIGHT,
+                        CELL_WIDTH as u32,
+                        CELL_HEIGHT as u32,
+                    ))
+                    .unwrap();
+            }
+        }
         canvas.copy(&texture, None, text_rect).unwrap();
 
+        // canvas.set_draw_color(Color::RGB(255, 255, 255));
+
+        // if char_index >= 0 {
+        //     println!("{}, {}, {:?}", chars.len(), input_chars.len(), match_chars);
+        // }
+
         canvas.set_draw_color(Color::RGB(255, 255, 255));
-
-        if char_index >= 0 {
-            println!(
-                "{}, {}, {:?}",
-                chars.len(),
-                input_chars.len(),
-                match_chars
-            );
-        }
-
         if input.len() > 0 {
             surface = font
                 .render(&input)
