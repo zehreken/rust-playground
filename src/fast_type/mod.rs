@@ -1,3 +1,4 @@
+use console::Key;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
@@ -9,6 +10,36 @@ const CELL_WIDTH: i32 = 10;
 const CELL_HEIGHT: i32 = 19;
 
 pub fn start_fast_type() {
+    let sample_text = "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.";
+    let term = console::Term::stdout();
+    let mut input = String::from("_");
+    term.write_line(sample_text);
+    // let res = term.read_line_initial_text("");
+    term.hide_cursor();
+    let mut res;
+    'running: loop {
+        res = term.read_key();
+        match res.unwrap() {
+            Key::Char(c) => {
+                input.pop();
+                input.push(c);
+                input.push_str("_");
+            }
+            Key::Escape => {
+                break 'running
+            }
+            Key::Backspace => {
+                input.pop();
+                input.pop();
+                input.push_str("_");
+            }
+            _ => {}
+        }
+        term.write_line(&input[..]);
+        term.move_cursor_up(1);
+    }
+    println!("exit");
+    return;
     const WIDTH: u32 = 500;
     const HEIGHT: u32 = 200;
     let sdl_context = sdl2::init().unwrap();
