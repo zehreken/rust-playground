@@ -1,3 +1,4 @@
+use console::style;
 use console::Key;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
@@ -11,10 +12,18 @@ const CELL_HEIGHT: i32 = 19;
 
 pub fn start_fast_type() {
     let sample_text = "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.";
+    let mut chars: Vec<char> = Vec::new();
+    let mut input_chars: Vec<char> = Vec::new();
+    let mut match_chars: Vec<bool> = Vec::new();
+    let mut char_index: i32 = -1;
+    for b in sample_text.chars() {
+        chars.push(b);
+    }
+
     let term = console::Term::stdout();
     let mut input = String::from("_");
     term.write_line(sample_text);
-    // let res = term.read_line_initial_text("");
+    term.write_line(&input[..]);
     term.hide_cursor();
     let mut res;
     'running: loop {
@@ -24,21 +33,44 @@ pub fn start_fast_type() {
                 input.pop();
                 input.push(c);
                 input.push_str("_");
+                input_chars.push(c);
+                char_index += 1;
+                if chars[char_index as usize] == input_chars[char_index as usize] {
+                    match_chars.push(true);
+                // println!("{}, {}", match_chars[char_index as usize], char_index);
+                } else {
+                    match_chars.push(false);
+                    // println!("{}, {}", match_chars[char_index as usize], char_index);
+                }
             }
-            Key::Escape => {
-                break 'running
-            }
+            Key::Escape => break 'running,
             Key::Backspace => {
                 input.pop();
                 input.pop();
                 input.push_str("_");
+                input_chars.pop();
+                match_chars.pop();
+                if char_index >= 0 {
+                    char_index -= 1;
+                }
             }
             _ => {}
         }
-        term.write_line(&input[..]);
         term.move_cursor_up(1);
+        term.clear_line();
+        term.write_line(&input[..]);
+        // println!("This is cyan: {}", style("whatever").red());
     }
-    println!("exit");
+    let mut true_count = 0;
+    let mut false_count = 0;
+    for b in match_chars {
+        if b {
+            true_count += 1;
+        } else {
+            false_count += 1;
+        }
+    }
+    println!("Exit: {} / {}", true_count, false_count);
     return;
     const WIDTH: u32 = 500;
     const HEIGHT: u32 = 200;
