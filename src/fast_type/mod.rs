@@ -1,5 +1,6 @@
 use console::style;
 use console::Key;
+use rand::Rng;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
@@ -11,7 +12,13 @@ const CELL_WIDTH: i32 = 10;
 const CELL_HEIGHT: i32 = 19;
 
 pub fn start_fast_type() {
-    let sample_text = "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.";
+    let quotes = ["Nothing is so difficult as not deceiving oneself.",
+    "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.",
+    "The harder you work, the luckier you get.",
+    "Don't ignore your dreams; don't work too much; say what you think; cultivate friendships; be happy.",
+    "Envy consists in seeing things never in themselves, but only in their relations. If you desire glory, you may envy Napoleon, but Napoleon envied Caesar, Caesar envied Alexander, and Alexander, I daresay, envied Hercules, who never existed.",
+    "I was an ordinary person who studied hard. There are no miracle people. It happens they get interested in this thing and they learn all this stuff, but they're just people."];
+    let sample_text = quotes[rand::thread_rng().gen_range(0, quotes.len())];
     let mut chars: Vec<char> = Vec::new();
     let mut input_chars: Vec<char> = Vec::new();
     let mut match_chars: Vec<bool> = Vec::new();
