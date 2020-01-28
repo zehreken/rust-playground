@@ -3,7 +3,7 @@ mod grid;
 
 use crate::automata::cell::*;
 use crate::automata::grid::*;
-use crate::fps_utils::fps_utils::*;
+use crate::fps_utils::*;
 use rand::Rng;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
@@ -25,7 +25,7 @@ fn get_live_neighbour_count(cell: Cell, grid: &Vec<Vec<Cell>>) -> i32 {
         }
     }
 
-    return neighbour_count;
+    neighbour_count
 }
 
 fn cell_tick(cell: &mut Cell, live_neighbour_count: i32) {

@@ -168,7 +168,7 @@ pub fn start_fast_type() {
                         current_word = "".to_string();
                         current_word_index += 1;
                         if current_word_index == word_count {
-                            println!("{}", "Sentence complete");
+                            println!("Sentence complete");
                         }
                     }
                 }

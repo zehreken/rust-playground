@@ -33,28 +33,26 @@ impl fmt::Display for Point {
 
 impl fmt::Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "position {}\n", self.position)?;
-        write!(f, "neighbours: [\n")?;
+        writeln!(f, "position {}", self.position)?;
+        writeln!(f, "neighbours: [")?;
         for i in 0..8 {
-            write!(f, "{}: {}\n", i, self.neighbours[i])?;
+            writeln!(f, "{}: {}", i, self.neighbours[i])?;
         }
-        write!(f, "]\n")?;
-        write!(f, "current_state: {}\n", self.current_state)?;
-        write!(f, "future_state: {}\n", self.future_state)?;
-        write!(f, "on_count: {}\n", self.on_count)
+        writeln!(f, "]")?;
+        writeln!(f, "current_state: {}", self.current_state)?;
+        writeln!(f, "future_state: {}", self.future_state)?;
+        writeln!(f, "on_count: {}", self.on_count)
     }
 }
 
 pub fn create_cell() -> Cell {
-    let cell = Cell {
+    Cell {
         position: Point { x: 0, y: 0 },
         neighbours: calculate_neighbours(0, 0),
         current_state: 0,
         future_state: 0,
         on_count: 0,
-    };
-
-    return cell;
+    }
 }
 
 pub fn calculate_neighbours(x: i32, y: i32) -> [Point; 8] {
@@ -93,5 +91,5 @@ pub fn calculate_neighbours(x: i32, y: i32) -> [Point; 8] {
         },
     ];
 
-    return neighbours;
+    neighbours
 }
