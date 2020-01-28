@@ -1,5 +1,6 @@
 extern crate rand;
 extern crate sdl2;
+use std::cmp::Ordering;
 use std::env;
 
 mod automata;
@@ -32,32 +33,36 @@ const RUST_BOOK: &str = "--rustbook";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    if args.len() < 2 {
-        println!(
-            "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
-            AUTOMATA,
-            FAST_TYPE,
-            FRAMEBUFFER,
-            CONCURRENCY,
-            OPENGL_TEST,
-            MEMORY,
-            CPAL_TEST,
-            RUST_BOOK,
-        );
-    } else if args.len() > 2 {
-        println!("Too many arguments!");
-    } else {
-        let arg: &str = &args[1][..];
-        match arg {
-            AUTOMATA => start_automata(),
-            FAST_TYPE => start_fast_type(),
-            FRAMEBUFFER => start_framebuffer(),
-            CONCURRENCY => start_concurrency(),
-            OPENGL_TEST => start_opengl_test(),
-            MEMORY => start_memory(),
-            CPAL_TEST => start_cpal(),
-            RUST_BOOK => start_rust_book(),
-            _ => println!("Unknown arguement!"),
+    match args.len().cmp(&2) {
+        Ordering::Less => {
+            println!(
+                "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
+                AUTOMATA,
+                FAST_TYPE,
+                FRAMEBUFFER,
+                CONCURRENCY,
+                OPENGL_TEST,
+                MEMORY,
+                CPAL_TEST,
+                RUST_BOOK,
+            );
+        }
+        Ordering::Greater => {
+            println!("Too many arguments!");
+        }
+        Ordering::Equal => {
+            let arg: &str = &args[1][..];
+            match arg {
+                AUTOMATA => start_automata(),
+                FAST_TYPE => start_fast_type(),
+                FRAMEBUFFER => start_framebuffer(),
+                CONCURRENCY => start_concurrency(),
+                OPENGL_TEST => start_opengl_test(),
+                MEMORY => start_memory(),
+                CPAL_TEST => start_cpal(),
+                RUST_BOOK => start_rust_book(),
+                _ => println!("Unknown arguement!"),
+            }
         }
     }
 }

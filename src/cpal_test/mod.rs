@@ -21,7 +21,7 @@ fn test_cpal() -> Result<(), anyhow::Error> {
     // Produce a sinusoid of maximum amplitude.
     let mut next_value = || {
         sample_clock = (sample_clock + 1.0) % sample_rate;
-        (sample_clock * 440.0 * 2.0 * 3.141592 / sample_rate).sin()
+        (sample_clock * 440.0 * 2.0 * std::f32::consts::PI / sample_rate).sin()
     };
 
     event_loop.run(move |id, result| {

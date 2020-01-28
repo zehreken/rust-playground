@@ -175,7 +175,7 @@ pub fn start_fast_type() {
                 sdl2::event::Event::TextInput {
                     timestamp: _,
                     window_id: _,
-                    text: text,
+                    text,
                 } => {
                     if text != " " {
                         current_word.push_str(&text);
