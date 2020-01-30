@@ -16,6 +16,13 @@ pub fn run() {
 
     let m = Message::Write(String::from("hello"));
     m.call();
+
+    let some_number = Some(5);
+    let some_string = Some("a string");
+
+    let number = 5;
+    let absent_number: Option<i32> = None;
+    // let sum = number + absent_number; // This is a compile error
 }
 
 enum IpAddrKind {
