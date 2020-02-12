@@ -3,9 +3,13 @@ pub fn run() {
     let float_point = Point { x: 2.3, y: 3.4 };
 
     let float_integer_point = MixedPoint { x: 2.1, y: 5 };
+
+    let numbers = vec![1, 2, 3, 4, 5, 6];
+    println!("largest: {}", largest(&numbers));
+    println!("largest_: {}", largest(&numbers));
 }
 
-fn largest<T>(list: &[T]) -> T {
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
     let mut largest = list[0];
 
     for &item in list.iter() {
@@ -16,6 +20,18 @@ fn largest<T>(list: &[T]) -> T {
 
     largest
 }
+
+fn largest_<T: PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0];
+
+    for item in list.iter() {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+} 
 
 struct Point<T> {
     x: T,
@@ -80,6 +96,21 @@ impl Summary for Tweet {
 
 impl WithDefault for Tweet {} // Tweet uses the default implementation
 
-pub fn notify(item: impl Summary) { // This parameter accepts any type that implements Summary(the trait)
+pub fn notify_(item: impl Summary) {
+    // This parameter accepts any type that implements Summary(the trait)
     println!("Breaking news! {}", item.summarize());
+}
+
+pub fn notify<T: Summary>(item: T) {
+    // More verbose form of the above
+    println!("Breaking news! {}", item.summarize());
+}
+
+pub fn double_bound_<T: Summary + WithDefault>(item: T) {} // T must implement both Summary and WithDefault
+
+pub fn double_bound<T>(item: T) -> String
+where
+    T: Summary + WithDefault,
+{
+    String::from("")
 }
