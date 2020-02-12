@@ -23,12 +23,14 @@ struct Point<T> {
 }
 
 impl<T> Point<T> {
-    fn x(&self) -> &T { // Returns a reference to x
+    fn x(&self) -> &T {
+        // Returns a reference to x
         &self.x
     }
 }
 
-impl Point<f32> { // This is only for type f32
+impl Point<f32> {
+    // This is only for type f32
     fn distance_from_origin(&self) -> f32 {
         (self.x.powi(2) + self.y.powi(2)).sqrt()
     }
@@ -37,4 +39,47 @@ impl Point<f32> { // This is only for type f32
 struct MixedPoint<T, U> {
     x: T,
     y: U,
+}
+
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+
+pub trait WithDefault {
+    fn default_method(&self) -> String {
+        // This is a default method
+        String::from("(Read more...)")
+    }
+}
+
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summary for Tweet {
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+impl WithDefault for Tweet {} // Tweet uses the default implementation
+
+pub fn notify(item: impl Summary) { // This parameter accepts any type that implements Summary(the trait)
+    println!("Breaking news! {}", item.summarize());
 }
