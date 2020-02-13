@@ -7,6 +7,30 @@ pub fn run() {
     let numbers = vec![1, 2, 3, 4, 5, 6];
     println!("largest: {}", largest(&numbers));
     println!("largest_: {}", largest(&numbers));
+
+    // Lifetimes
+    let string1 = String::from("abcd");
+    let string2;
+    let result;
+    {
+        string2 = String::from("xyz");
+        result = longest(string1.as_str(), string2.as_str());
+    }
+    println!("the longer string is {}", result);
+
+    // &i32 // a reference
+    // &'a i32 // a reference with an explicit lifetime
+    // &'a mut i32 // a mutable reference with an explicit lifetime
+}
+
+// We use slices because we don't want longest to take ownership of its parameters
+// The first 'a is the generic lifetime, the rest means both x and y and the return value has the same lifetime 'a
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
 }
 
 fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
@@ -31,7 +55,7 @@ fn largest_<T: PartialOrd>(list: &[T]) -> &T {
     }
 
     largest
-} 
+}
 
 struct Point<T> {
     x: T,
