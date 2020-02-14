@@ -21,6 +21,48 @@ pub fn run() {
     // &i32 // a reference
     // &'a i32 // a reference with an explicit lifetime
     // &'a mut i32 // a mutable reference with an explicit lifetime
+
+    let novel = String::from("Call me Ihsmael. Some years ago...");
+    let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+    let i = ImportantExceprt {
+        part: first_sentence,
+    };
+}
+
+// Generic type parameters, trait bounds, and lifetimes all in one function!
+use std::fmt::Display;
+fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
+where
+    T: Display,
+{
+    println!("Announcement: {}", ann);
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+
+// Structs doesn't hold owned type but a reference
+// This annotation means an instance of ImportantExcerpt
+// cant' outlive the reference it holds in its part field
+struct ImportantExceprt<'a> {
+    part: &'a str,
+}
+
+impl<'a> ImportantExceprt<'a> {
+    // We're not required to annotate the lifetime of the reference to self because of the first elision rule
+    fn level(&self) -> i32 {
+        3
+    }
+
+    // There are two input lifetimes, Rust applies the first lifetime elision rule and gives
+    // both &self and announcement their own lifetimes. Then, because one of the parameters is &self,
+    // the return type gets the lifetime of &self, and all lifetimes have been accounted for.
+    fn announce_and_return_part(&self, announcement: &str) -> &str {
+        println!("Attention please: {}", announcement);
+        self.part
+    }
 }
 
 // We use slices because we don't want longest to take ownership of its parameters
