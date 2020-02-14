@@ -1,4 +1,5 @@
 use console::style;
+use console::Style;
 use console::Key;
 use rand::Rng;
 use sdl2::keyboard::Keycode;
@@ -23,15 +24,30 @@ pub fn start_fast_type() {
     let mut input_chars: Vec<char> = Vec::new();
     let mut match_chars: Vec<bool> = Vec::new();
     let mut char_index: i32 = -1;
+
+    let reset = "\x1b[0m";
+    let red = "\x1b[0;31m";
+    let green = "\x1b[0;32m";
+    let mut temp_colored_string = String::new();
+    let mut index = 0;
     for b in sample_text.chars() {
         chars.push(b);
+        temp_colored_string.push(b);
+        if index % 2 == 0 {
+            temp_colored_string.push_str(red);
+        } else {
+            temp_colored_string.push_str(green);
+        }
+        index += 1;
     }
 
     let term = console::Term::stdout();
     let mut input = String::from("_");
-    term.write_line(sample_text);
-    term.write_line(&input[..]);
-    term.hide_cursor();
+    term.write_line(temp_colored_string.as_str())
+        .expect("Error while writing line");
+    term.write_line(&input[..])
+        .expect("Error while writing line");
+    term.hide_cursor().expect("Error while hiding cursor");
     let mut res;
     'running: loop {
         res = term.read_key();
@@ -63,9 +79,11 @@ pub fn start_fast_type() {
             }
             _ => {}
         }
-        term.move_cursor_up(1);
-        term.clear_line();
-        term.write_line(&input[..]);
+        term.move_cursor_up(1)
+            .expect("Error while moving cursor up");
+        term.clear_line().expect("Error while clearing line");
+        term.write_line(&input[..])
+            .expect("Error while writing line");
         // println!("This is cyan: {}", style("whatever").red());
     }
     let mut true_count = 0;
@@ -77,7 +95,15 @@ pub fn start_fast_type() {
             false_count += 1;
         }
     }
-    println!("Exit: {} / {}", true_count, false_count);
+    println!(
+        "Exit: {} / {}",
+        style(true_count).yellow(),
+        style(false_count).red()
+    );
+    println!("\x1b[32mThis is colored text.");
+    println!("This is colored text.\x1b[0m");
+    let cyan = Style::new().cyan();
+    println!("This is {} neat", cyan.apply_to("quite"));
     return;
     const WIDTH: u32 = 500;
     const HEIGHT: u32 = 200;
