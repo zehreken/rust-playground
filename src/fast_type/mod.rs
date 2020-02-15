@@ -1,6 +1,6 @@
 use console::style;
-use console::Style;
 use console::Key;
+use console::Style;
 use rand::Rng;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
