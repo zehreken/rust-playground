@@ -58,6 +58,7 @@ impl Rectangle {
     }
 }
 
+#[ignore]
 #[test]
 fn larger_can_hold_smaller() {
     let larger = Rectangle {
