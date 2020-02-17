@@ -47,10 +47,7 @@ fn main() {
                 RUST_BOOK,
             );
         }
-        Ordering::Greater => {
-            println!("Too many arguments!");
-        }
-        Ordering::Equal => {
+        _ => {
             let arg: &str = &args[1][..];
             match arg {
                 AUTOMATA => start_automata(),
@@ -61,7 +58,7 @@ fn main() {
                 MEMORY => start_memory(),
                 CPAL_TEST => start_cpal(),
                 RUST_BOOK => start_rust_book(),
-                _ => println!("Unknown arguement!"),
+                _ => println!("Unknown argument!"),
             }
         }
     }
