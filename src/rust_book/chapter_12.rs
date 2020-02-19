@@ -19,16 +19,31 @@ pub fn run() {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn one_result() {
+    fn case_sensitive() {
         let query = "duct";
         let contents = "\
 Rust:
 save, fast, productive.
-Pick three.";
+Pick three.
+Duct tape.";
 
         assert_eq!(
             vec!["save, fast, productive."],
             crate::rust_book::lib::search(query, contents)
+        );
+    }
+
+    fn case_insensitive() {
+        let query = "rUsT";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Trust me.";
+
+        assert_eq!(
+            vec!["Rust:", "Trust me."],
+            crate::rust_book::lib::search_case_insensitive(query, contents)
         );
     }
 }
