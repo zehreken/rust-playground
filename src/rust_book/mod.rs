@@ -23,6 +23,6 @@ pub fn start_rust_book() {
     // chapter_9::run();
     // chapter_10::run();
     // chapter_11::run();
-    // chapter_12::run();
-    chapter_13::run();
+    chapter_12::run();
+    // chapter_13::run();
 }
