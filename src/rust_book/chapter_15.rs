@@ -1,10 +1,12 @@
-use List::{Cons, Nil};
+use std::rc::Rc;
+// use List::{Cons, Nil};
+use List2::{Cons, Nil};
 
 pub fn run() {
     let b = Box::new(5);
     println!("b = {}", b);
 
-    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+    // let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 
     let x = 5;
     let y = &x;
@@ -23,10 +25,40 @@ pub fn run() {
 
     let m = MyBox::new(String::from("Rust"));
     hello(&m);
+
+    // Drop trait
+    let c = CustomSmartPointer {
+        data: String::from("my stuff"),
+    };
+    drop(c);
+    let d = CustomSmartPointer {
+        data: String::from("other stuff"),
+    };
+    println!("CustomSmartPointers created.");
+
+    // Rc<T> trait
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    let b = Cons(3, Rc::clone(&a));
+    let c = Cons(4, Rc::clone(&a));
 }
 
-enum List {
-    Cons(i32, Box<List>), // By using a box , we've broken the infinite, recursive chain
+struct CustomSmartPointer {
+    data: String,
+}
+
+impl Drop for CustomSmartPointer {
+    fn drop(&mut self) {
+        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
+    }
+}
+
+// enum List {
+//     Cons(i32, Box<List>), // By using a box , we've broken the infinite, recursive chain
+//     Nil,
+// }
+
+enum List2 {
+    Cons(i32, Rc<List2>),
     Nil,
 }
 
