@@ -1,4 +1,6 @@
+use std::rc::Rc;
 use std::sync::mpsc;
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
@@ -62,4 +64,38 @@ pub fn run() {
     for received in rx {
         println!("Got: {}", received);
     }
+
+    // Mutex<T>
+    run_mutex();
+}
+
+fn run_mutex() {
+    let m = Mutex::new(5);
+
+    {
+        let mut num = m.lock().unwrap();
+        *num = 6;
+        println!("{:?}", m); // Output: Mutex { data: <locked> }
+    } // Lock release happens here automatically
+
+    println!("m = {:?}", m);
+
+    let counter = Arc::new(Mutex::new(0)); // Rc enables multiple owners
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
 }
