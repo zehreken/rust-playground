@@ -1,4 +1,4 @@
-use crate::rust_book::lib::{Button, Draw, Screen};
+use crate::rust_book::lib::{Button, Draw, Post, Screen};
 
 pub fn run() {
     let screen = Screen {
@@ -21,6 +21,18 @@ pub fn run() {
     };
 
     screen.run();
+
+    // Post example
+    let mut post = Post::new();
+
+    post.add_text("I ate a salad for lunch today");
+    assert_eq!("", post.content());
+
+    post.request_review();
+    assert_eq!("", post.content());
+
+    post.approve();
+    assert_eq!("I ate a salad for lunch today", post.content());
 }
 
 struct SelectBox {
