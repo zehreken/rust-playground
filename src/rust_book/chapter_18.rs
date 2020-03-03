@@ -4,6 +4,10 @@ pub fn run() {
     while_let();
 
     for_loop();
+
+    match_literals();
+
+    match_named();
 }
 
 fn run_if_let() {
@@ -41,7 +45,38 @@ fn while_let() {
 fn for_loop() {
     let v = vec!['a', 'b', 'c'];
 
-    for (index, value) in v.iter().enumerate() { // (index, value) tuple is produced by enumerate()
+    for (index, value) in v.iter().enumerate() {
+        // (index, value) tuple is produced by enumerate()
         println!("{} is at index {}", value, index);
     }
+}
+
+fn match_literals() {
+    let x = 1;
+
+    match x {
+        1 => println!("one"),
+        2 => println!("two"),
+        3 => println!("three"),
+        _ => println!("anything"),
+    }
+
+    match x {
+        1 | 2 => println!("one or two"), // Multiple pattern
+        3 => println!("three"),
+        _ => println!("anything"),
+    }
+}
+
+fn match_named() {
+    let x = Some(5);
+    let y = 10;
+
+    match x {
+        Some(50) => println!("Got 50"),
+        Some(y) => println!("Matched, y = {:?}", y), // this is a new 'y'
+        _ => println!("Default case, x = {:?}", x),
+    }
+
+    println!("at the end: x = {:?}, y = {:?}", x, y);
 }
