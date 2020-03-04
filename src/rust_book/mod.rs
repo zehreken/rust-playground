@@ -7,6 +7,7 @@ mod chapter_15;
 mod chapter_16;
 mod chapter_17;
 mod chapter_18;
+mod chapter_19;
 mod chapter_2;
 mod chapter_3;
 mod chapter_4;
@@ -34,5 +35,6 @@ pub fn start_rust_book() {
     // chapter_15::run();
     // chapter_16::run();
     // chapter_17::run();
-    chapter_18::run();
+    // chapter_18::run();
+    chapter_19::run();
 }
