@@ -5,6 +5,18 @@ pub fn run() {
     unsafe_rust();
 
     advanced_traits();
+
+    advanced_type();
+}
+
+// Advanced types
+fn advanced_type() {
+    type Kilometers = i32;
+
+    let x: i32 = 5;
+    let y: Kilometers = 5;
+
+    println!("x + y = {}", x + y);
 }
 
 trait OutlinePrint: fmt::Display {
