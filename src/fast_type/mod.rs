@@ -76,12 +76,23 @@ pub fn start_fast_type() {
             }
             _ => {}
         }
-        
+
+        let mut input_temp = String::new();
+        let asd:Vec<(&char, &bool)> = input_chars.iter().zip(match_chars.iter()).collect();
+        for (a, b) in asd {
+            if *b {
+                input_temp.push_str(green);
+            } else {
+                input_temp.push_str(red);
+            }
+            input_temp.push(*a);
+        }
         term.move_cursor_up(1)
             .expect("Error while moving cursor up");
         term.clear_line().expect("Error while clearing line");
-        term.write_line(&input[..])
+        term.write_line(&input_temp[..])
             .expect("Error while writing line");
+        // println!("input: {}, match: {}", input_chars.len(), match_chars.len());
         // println!("This is cyan: {}", style("whatever").red());
     }
     let mut true_count = 0;
@@ -104,6 +115,7 @@ pub fn start_fast_type() {
     println!("This is {} neat", cyan.apply_to("quite"));
     return; // Program ends here
             //////////////////////////////////////////////////////////////////////////////////////////
+    /*
     const CELL_WIDTH: i32 = 10;
     const CELL_HEIGHT: i32 = 19;
     const WIDTH: u32 = 500;
@@ -279,4 +291,5 @@ pub fn start_fast_type() {
     }
 
     video_subsystem.text_input().stop();
+    */
 }
