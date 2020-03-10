@@ -9,15 +9,11 @@ use sdl2::surface::Surface;
 use std::path::Path;
 use std::time::Duration;
 
-const CELL_WIDTH: i32 = 10;
-const CELL_HEIGHT: i32 = 19;
-
 pub fn start_fast_type() {
     let quotes = ["Nothing is so difficult as not deceiving oneself.",
     "Talent is cheaper than table salt. What separates the talented individual from the successful one is a lot of hard work.",
     "The harder you work, the luckier you get.",
     "Don't ignore your dreams; don't work too much; say what you think; cultivate friendships; be happy.",
-    "Envy consists in seeing things never in themselves, but only in their relations. If you desire glory, you may envy Napoleon, but Napoleon envied Caesar, Caesar envied Alexander, and Alexander, I daresay, envied Hercules, who never existed.",
     "I was an ordinary person who studied hard. There are no miracle people. It happens they get interested in this thing and they learn all this stuff, but they're just people."];
     let sample_text = quotes[rand::thread_rng().gen_range(0, quotes.len())];
     let mut chars: Vec<char> = Vec::new();
@@ -28,12 +24,13 @@ pub fn start_fast_type() {
     let reset = "\x1b[0m";
     let red = "\x1b[0;31m";
     let green = "\x1b[0;32m";
+    let yellow = "\x1b[0;33m";
     let mut temp_colored_string = String::new();
     let mut index = 0;
-    for b in sample_text.chars() {
-        chars.push(b);
-        temp_colored_string.push(b);
-        if index % 2 == 0 {
+    for ch in sample_text.chars() {
+        chars.push(ch);
+        temp_colored_string.push(ch);
+        if index % 4 == 0 {
             temp_colored_string.push_str(red);
         } else {
             temp_colored_string.push_str(green);
@@ -79,6 +76,7 @@ pub fn start_fast_type() {
             }
             _ => {}
         }
+        
         term.move_cursor_up(1)
             .expect("Error while moving cursor up");
         term.clear_line().expect("Error while clearing line");
@@ -100,11 +98,14 @@ pub fn start_fast_type() {
         style(true_count).yellow(),
         style(false_count).red()
     );
-    println!("\x1b[32mThis is colored text.");
-    println!("This is colored text.\x1b[0m");
+    println!("\x1b[33mThis is colored text.");
+    println!("This is colored text.\x1b[0m"); // Last part resets the color
     let cyan = Style::new().cyan();
     println!("This is {} neat", cyan.apply_to("quite"));
-    return;
+    return; // Program ends here
+            //////////////////////////////////////////////////////////////////////////////////////////
+    const CELL_WIDTH: i32 = 10;
+    const CELL_HEIGHT: i32 = 19;
     const WIDTH: u32 = 500;
     const HEIGHT: u32 = 200;
     let sdl_context = sdl2::init().unwrap();
