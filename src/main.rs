@@ -4,41 +4,37 @@ use std::cmp::Ordering;
 use std::env;
 
 mod automata;
-pub use crate::automata::*;
+use automata::*;
 mod fps_utils;
-pub use crate::fps_utils::*;
+use fps_utils::*;
 mod framebuffer;
-pub use crate::framebuffer::*;
-mod fast_type;
-pub use crate::fast_type::*;
+use framebuffer::*;
 mod concurrency;
-pub use crate::concurrency::*;
+use concurrency::*;
 mod opengl_test;
-use crate::opengl_test::*;
+use opengl_test::*;
 mod memory;
-use crate::memory::*;
+use memory::*;
 mod cpal_test;
-use crate::cpal_test::*;
+use cpal_test::*;
 mod rust_book;
-use crate::rust_book::*;
+use rust_book::*;
 
-const AUTOMATA: &str = "--automata";
-const FAST_TYPE: &str = "--fasttype";
-const FRAMEBUFFER: &str = "--framebuffer";
-const CONCURRENCY: &str = "--concurrency";
-const OPENGL_TEST: &str = "--opengltest";
-const MEMORY: &str = "--memory";
-const CPAL_TEST: &str = "--cpaltest";
-const RUST_BOOK: &str = "--rustbook";
+const AUTOMATA: &str = "automata";
+const FRAMEBUFFER: &str = "framebuffer";
+const CONCURRENCY: &str = "concurrency";
+const OPENGL_TEST: &str = "opengltest";
+const MEMORY: &str = "memory";
+const CPAL_TEST: &str = "cpaltest";
+const RUST_BOOK: &str = "rustbook";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     match args.len().cmp(&2) {
         Ordering::Less => {
             println!(
-                "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
+                "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
                 AUTOMATA,
-                FAST_TYPE,
                 FRAMEBUFFER,
                 CONCURRENCY,
                 OPENGL_TEST,
@@ -51,7 +47,6 @@ fn main() {
             let arg: &str = &args[1][..];
             match arg {
                 AUTOMATA => start_automata(),
-                FAST_TYPE => start_fast_type(),
                 FRAMEBUFFER => start_framebuffer(),
                 CONCURRENCY => start_concurrency(),
                 OPENGL_TEST => start_opengl_test(),
