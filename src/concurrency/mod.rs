@@ -2,34 +2,19 @@ use std::thread;
 use std::time::Duration;
 
 pub fn start_concurrency() {
-    // Saving the value of the thread(handle)
-    let handle = thread::spawn(|| {
-        for i in 1..10 {
-            println!("{} from side thread", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    for i in 1..5 {
-        println!("{} from main thread", i);
-        thread::sleep(Duration::from_millis(1));
+    let mut handles = vec![];
+    for j in 0..8 {
+        let mut v = vec![];
+        handles.push(thread::spawn(move || {
+            for i in 0..8 {
+                v.push(j * 8 + i);
+            }
+            v
+        }));
     }
 
-    handle.join().unwrap(); // Calling join blocks the current thread from exiting
-
-    let v = vec![1, 2, 3];
-    let handle2 = thread::spawn(move || {
-        for i in 1..5 {
-            println!("here is a vector {:?}", v);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    for i in 1..10 {
-        println!("Another {} from main thread", i);
-        thread::sleep(Duration::from_millis(1));
+    for h in handles {
+        let v = h.join().unwrap(); // Calling join blocks the current thread from exiting
+        println!("{:?}", v);
     }
-
-    // handle2.join().unwrap();
-    // handle.join().unwrap();
 }

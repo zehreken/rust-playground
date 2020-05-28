@@ -34,13 +34,7 @@ fn main() {
         Ordering::Less => {
             println!(
                 "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
-                AUTOMATA,
-                FRAMEBUFFER,
-                CONCURRENCY,
-                OPENGL_TEST,
-                MEMORY,
-                CPAL_TEST,
-                RUST_BOOK,
+                AUTOMATA, FRAMEBUFFER, CONCURRENCY, OPENGL_TEST, MEMORY, CPAL_TEST, RUST_BOOK,
             );
         }
         _ => {
