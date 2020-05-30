@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_assignments)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
+#![allow(unused_unsafe)]
+#![allow(unused_must_use)]
 extern crate rand;
 extern crate sdl2;
 use std::cmp::Ordering;
