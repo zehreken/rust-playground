@@ -1,7 +1,7 @@
 use std::thread;
 use std::time::Instant;
 
-pub fn start_basic_threads() {
+pub fn start() {
     let now = Instant::now();
     let sum = single_thread();
     let diff = Instant::now() - now;
@@ -28,7 +28,7 @@ fn multiple_threads() -> f32 {
     let mut sum = 0.0;
     let mut handles = vec![];
     for _ in 0..8 {
-        handles.push(thread::spawn(move || {
+        handles.push(thread::spawn(|| {
             let mut v = vec![];
             for _ in 0..8 {
                 v.push(expensive_procedure());
