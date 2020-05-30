@@ -6,7 +6,6 @@ use std::env;
 mod automata;
 use automata::*;
 mod fps_utils;
-use fps_utils::*;
 mod framebuffer;
 use framebuffer::*;
 mod concurrency;
