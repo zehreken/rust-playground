@@ -1,6 +1,6 @@
 use cpal::traits::{DeviceTrait, EventLoopTrait, HostTrait};
 
-pub fn start_cpal() {
+pub fn run() {
     let result = test_cpal();
     println!("{:?}", result);
 }

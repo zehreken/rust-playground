@@ -18,7 +18,7 @@ const VERTICES: [GLfloat; 12] = [
 
 const INDICES: [GLuint; 6] = [0, 1, 3, 1, 2, 3];
 
-pub fn start_opengl_test() {
+pub fn run() {
     let vertex_source =
         fs::read_to_string("src/opengl_test/vertex.glsl").expect("Error reading file vertex.glsl");
     let fragment_source = fs::read_to_string("src/opengl_test/juliaset.glsl")

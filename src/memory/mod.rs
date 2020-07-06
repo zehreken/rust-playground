@@ -1,4 +1,4 @@
-pub fn start_memory() {
+pub fn run() {
     let mut a: Vec<i32> = vec![0, 1, 2, 3, 4, 5];
 
     a = print_vector(a);

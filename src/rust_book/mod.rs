@@ -19,7 +19,7 @@ mod chapter_8;
 mod chapter_9;
 mod lib;
 
-pub fn start_rust_book() {
+pub fn run() {
     // chapter_2::run();
     // chapter_3::run();
     // chapter_4::run();

@@ -53,7 +53,7 @@ fn cell_swap(cell: &mut Cell) {
     cell.current_state = cell.future_state;
 }
 
-pub fn start_automata() {
+pub fn run() {
     let mut rng = rand::thread_rng();
 
     let mut grid: Vec<Vec<Cell>> = Vec::new();

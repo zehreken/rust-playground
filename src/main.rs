@@ -11,20 +11,14 @@ use std::cmp::Ordering;
 use std::env;
 
 mod automata;
-use automata::*;
+mod concurrency;
+mod cpal_test;
 mod fps_utils;
 mod framebuffer;
-use framebuffer::*;
-mod concurrency;
-use concurrency::*;
-mod opengl_test;
-use opengl_test::*;
+mod ggez_test;
 mod memory;
-use memory::*;
-mod cpal_test;
-use cpal_test::*;
+mod opengl_test;
 mod rust_book;
-use rust_book::*;
 
 const AUTOMATA: &str = "automata";
 const FRAMEBUFFER: &str = "framebuffer";
@@ -33,26 +27,28 @@ const OPENGL_TEST: &str = "opengltest";
 const MEMORY: &str = "memory";
 const CPAL_TEST: &str = "cpaltest";
 const RUST_BOOK: &str = "rustbook";
+const GGEZ: &str = "ggez";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     match args.len().cmp(&2) {
         Ordering::Less => {
             println!(
-                "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
-                AUTOMATA, FRAMEBUFFER, CONCURRENCY, OPENGL_TEST, MEMORY, CPAL_TEST, RUST_BOOK,
+                "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
+                AUTOMATA, FRAMEBUFFER, CONCURRENCY, OPENGL_TEST, MEMORY, CPAL_TEST, RUST_BOOK, GGEZ
             );
         }
         _ => {
             let arg: &str = &args[1][..];
             match arg {
-                AUTOMATA => start_automata(),
-                FRAMEBUFFER => start_framebuffer(),
-                CONCURRENCY => start_concurrency(),
-                OPENGL_TEST => start_opengl_test(),
-                MEMORY => start_memory(),
-                CPAL_TEST => start_cpal(),
-                RUST_BOOK => start_rust_book(),
+                AUTOMATA => automata::run(),
+                FRAMEBUFFER => framebuffer::run(),
+                CONCURRENCY => concurrency::run(),
+                OPENGL_TEST => opengl_test::run(),
+                MEMORY => memory::run(),
+                CPAL_TEST => cpal_test::run(),
+                RUST_BOOK => rust_book::run(),
+                GGEZ => ggez_test::run(),
                 _ => println!("Unknown argument!"),
             }
         }

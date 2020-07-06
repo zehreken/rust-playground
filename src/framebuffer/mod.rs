@@ -8,7 +8,7 @@ const WIDTH: u32 = 800;
 const HEIGHT: u32 = 400;
 const CHANNEL_COUNT: u32 = 3;
 
-pub fn start_framebuffer() {
+pub fn run() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
