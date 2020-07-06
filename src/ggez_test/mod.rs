@@ -2,6 +2,7 @@ use cgmath;
 use ggez;
 use ggez::event::{self, EventHandler};
 use ggez::{graphics, Context, ContextBuilder, GameResult};
+mod collision;
 
 pub fn run() {
     // Make a Context.
@@ -49,10 +50,23 @@ impl EventHandler for MainState {
             x: offset,
             y: offset,
         };
+
+        let circle = graphics::Mesh::new_circle(
+            ctx,
+            graphics::DrawMode::stroke(1.0),
+            position,
+            100.0,
+            2.0,
+            graphics::WHITE,
+        )
+        .unwrap();
+        graphics::draw(ctx, &circle, (position,)).unwrap();
         graphics::draw(ctx, &self.text, (position,)).unwrap();
 
         self.frames += 1;
-        if self.frames % 100 == 0 {}
+        if self.frames % 100 == 0 {
+            println!("FPS: {}", ggez::timer::fps(ctx));
+        }
 
         graphics::present(ctx)
     }
