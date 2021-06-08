@@ -24,7 +24,6 @@ const FRAMEBUFFER: &str = "framebuffer";
 const CONCURRENCY: &str = "concurrency";
 const OPENGL_TEST: &str = "opengltest";
 const MEMORY: &str = "memory";
-const CPAL_TEST: &str = "cpaltest";
 const RUST_BOOK: &str = "rustbook";
 const GGEZ: &str = "ggez";
 
