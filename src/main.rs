@@ -30,6 +30,8 @@ const GGEZ: &str = "ggez";
 const TODO: &str = "todo";
 
 fn main() {
+    todo_list::run();
+    return;
     let args: Vec<String> = env::args().collect();
     match args.len().cmp(&2) {
         Ordering::Less => {
@@ -48,7 +50,7 @@ fn main() {
                 MEMORY => memory::run(),
                 RUST_BOOK => rust_book::run(),
                 GGEZ => ggez_test::run(),
-		TODO => todo_list::run(),
+                TODO => todo_list::run(),
                 _ => println!("Unknown argument!"),
             }
         }

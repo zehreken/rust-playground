@@ -12,6 +12,7 @@ rand = "0.8.3"
 cgmath = "0.18.0"
 anyhow = "1.0"
 ggez = "0.5.1"
+structopt = "0.3"
 
 [dependencies.sdl2]
 version = "0.34.3"
