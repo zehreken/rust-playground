@@ -1,6 +1,7 @@
 mod cli;
+mod tasks;
 use structopt::StructOpt;
 
 pub fn run() {
-    cli::CommandLineArgs::from_args();
+    println!("{:#?}", cli::CommandLineArgs::from_args());
 }
