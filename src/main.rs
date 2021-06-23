@@ -30,8 +30,6 @@ const GGEZ: &str = "ggez";
 const TODO: &str = "todo";
 
 fn main() {
-    todo_list::run();
-    return;
     let args: Vec<String> = env::args().collect();
     match args.len().cmp(&2) {
         Ordering::Less => {
