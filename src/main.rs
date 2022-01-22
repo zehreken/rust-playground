@@ -14,7 +14,6 @@ mod automata;
 mod concurrency;
 mod fps_utils;
 mod framebuffer;
-mod ggez_test;
 mod memory;
 mod opengl_test;
 mod rust_book;
@@ -26,7 +25,6 @@ const CONCURRENCY: &str = "concurrency";
 const OPENGL_TEST: &str = "opengltest";
 const MEMORY: &str = "memory";
 const RUST_BOOK: &str = "rustbook";
-const GGEZ: &str = "ggez";
 const TODO: &str = "todo";
 
 fn main() {
@@ -34,8 +32,8 @@ fn main() {
     match args.len().cmp(&2) {
         Ordering::Less => {
             println!(
-                "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
-                AUTOMATA, FRAMEBUFFER, CONCURRENCY, OPENGL_TEST, MEMORY, RUST_BOOK, GGEZ, TODO
+                "OPTIONS:\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}\n\t{}",
+                AUTOMATA, FRAMEBUFFER, CONCURRENCY, OPENGL_TEST, MEMORY, RUST_BOOK, TODO
             );
         }
         _ => {
@@ -47,7 +45,6 @@ fn main() {
                 OPENGL_TEST => opengl_test::run(),
                 MEMORY => memory::run(),
                 RUST_BOOK => rust_book::run(),
-                GGEZ => ggez_test::run(),
                 TODO => todo_list::run(),
                 _ => println!("Unknown argument!"),
             }
