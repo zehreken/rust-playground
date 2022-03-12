@@ -6,7 +6,7 @@ use std::ffi::{CStr, CString};
 use std::fs;
 use std::time::{Duration, Instant};
 
-const SCREEN_WIDTH: u32 = 800;
+const SCREEN_WIDTH: u32 = 600;
 const SCREEN_HEIGHT: u32 = 600;
 
 const VERTICES: [GLfloat; 12] = [
@@ -21,7 +21,7 @@ const INDICES: [GLuint; 6] = [0, 1, 3, 1, 2, 3];
 pub fn run() {
     let vertex_source =
         fs::read_to_string("src/opengl_test/vertex.glsl").expect("Error reading file vertex.glsl");
-    let fragment_source = fs::read_to_string("src/opengl_test/juliaset.glsl")
+    let fragment_source = fs::read_to_string("src/opengl_test/fragment.glsl")
         .expect("Error reading file fragment.glsl");
 
     let sdl_context = sdl2::init().unwrap();
