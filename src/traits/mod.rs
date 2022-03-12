@@ -1,18 +1,19 @@
 pub fn run() {
-    let foo = Foo::new();
-    Foo::method_one();
-    foo.method_three();
-    foo.method_two();
+    let mut boom: Vec<Box<dyn MyTrait>> = vec![];
 
-    let bar = Bar::new();
-    Bar::method_one();
-    bar.method_three();
-    bar.method_two();
+    for i in 0..10 {
+        let foo = Foo::new(i);
+        let bar = Bar::new(format!("bar {}", i));
+        boom.push(Box::new(foo));
+        boom.push(Box::new(bar));
+    }
+
+    for t in boom.iter() {
+        t.method_three();
+    }
 }
 
 pub trait MyTrait {
-    fn method_one();
-    fn method_two(self); // This method moves ownership
     fn method_three(&self);
 }
 
@@ -22,20 +23,12 @@ pub struct Foo {
 }
 
 impl Foo {
-    fn new() -> Self {
-        Foo { foo_int: 0 }
+    fn new(v: i32) -> Self {
+        Foo { foo_int: v }
     }
 }
 
 impl MyTrait for Foo {
-    fn method_one() {
-        println!("Non-associated method of Foo");
-    }
-
-    fn method_two(self) {
-        println!("[Moved]Associated method of Foo {}", self.foo_int);
-    }
-
     fn method_three(&self) {
         println!("Associated method of Foo {}", self.foo_int);
     }
@@ -47,21 +40,11 @@ pub struct Bar {
 }
 
 impl Bar {
-    fn new() -> Self {
-        Bar {
-            bar_string: "nonsense".to_string(),
-        }
+    fn new(v: String) -> Self {
+        Bar { bar_string: v }
     }
 }
 impl MyTrait for Bar {
-    fn method_one() {
-        println!("Non-associated method of Bar");
-    }
-
-    fn method_two(self) {
-        println!("[Moved]Associated method of Bar {}", self.bar_string);
-    }
-
     fn method_three(&self) {
         println!("Associated method of Bar {}", self.bar_string);
     }
