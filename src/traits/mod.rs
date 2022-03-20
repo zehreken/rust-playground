@@ -1,5 +1,7 @@
+use std::thread;
+
 pub fn run() {
-    let mut boom: Vec<Box<dyn MyTrait>> = vec![];
+    let mut boom: Vec<Box<dyn MyTrait + Send>> = vec![];
 
     for i in 0..10 {
         let foo = Foo::new(i);
@@ -8,13 +10,24 @@ pub fn run() {
         boom.push(Box::new(bar));
     }
 
-    for t in boom.iter() {
-        t.method_three();
+    process(&boom);
+
+    let h = thread::spawn(move || {
+        for t in boom.iter() {
+            t.method();
+        }
+    });
+    h.join();
+}
+
+fn process(objects: &[Box<dyn MyTrait + Send>]) {
+    for obj in objects {
+        obj.method();
     }
 }
 
-pub trait MyTrait {
-    fn method_three(&self);
+pub trait MyTrait: Send {
+    fn method(&self);
 }
 
 // Foo
@@ -29,7 +42,7 @@ impl Foo {
 }
 
 impl MyTrait for Foo {
-    fn method_three(&self) {
+    fn method(&self) {
         println!("Associated method of Foo {}", self.foo_int);
     }
 }
@@ -45,7 +58,7 @@ impl Bar {
     }
 }
 impl MyTrait for Bar {
-    fn method_three(&self) {
+    fn method(&self) {
         println!("Associated method of Bar {}", self.bar_string);
     }
 }
